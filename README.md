@@ -15,7 +15,7 @@ serving.
 This repository is the V0.1 priority artifact for TilePO. It contains the
 method description, source code, V0.1 evidence, public manifests, reproducibility
 scripts, and checksum tooling needed to make the result public, citable, and
-verifiable without relying on arXiv, ChinaXiv, OSF, or TechRxiv acceptance.
+verifiable .
 
 ## What TilePO Claims
 

@@ -50,8 +50,7 @@ Current PDF-included record, 2026-06-12:
 - Release package SHA256: `e48a32ddfa081a7ab4a327fa56044abd6eb8c0abba75666e5db8438ea91db5dc`
 
 These records are backed by public GitHub releases, Zenodo archives, Software
-Heritage snapshots, and SHA256 checksums. They are independent of arXiv,
-ChinaXiv, OSF, or TechRxiv acceptance.
+Heritage snapshots, and SHA256 checksums.
 
 ## Citation
 

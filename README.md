@@ -1,11 +1,3 @@
-<p align="center">
-  <img src="docs/assets/tilemem-tilepo-logo.png" alt="TileMEM TilePO logo" width="760">
-</p>
-
-<p align="center">
-  <img src="docs/assets/tilemem-moe-routing-memory-hierarchy.png" alt="TileMEM MoE expert routing and memory hierarchy overview" width="920">
-</p>
-
 # TileMEM / TilePO
 
 TileMEM is an open MoE serving optimization project. TilePO is its BF16

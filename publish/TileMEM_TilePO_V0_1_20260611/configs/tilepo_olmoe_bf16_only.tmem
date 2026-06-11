@@ -1,0 +1,48 @@
+model olmoe {
+  layers = 16
+  experts_per_layer = 64
+  hidden_size = 2048
+  intermediate_size = 8192
+}
+
+workload tilepo_bf16_ablation {
+  label = "tilepo_bf16_ablation"
+}
+
+tile moe_tiles {
+  hidden_tile = 128
+  intermediate_tile = 256
+  shard_count = 4
+  projection_groups = ["gate_up", "down"]
+}
+
+memory ram_vram {
+  gpu_cache_budget_gib = 8.0
+  cpu_cache_budget_gib = 64.0
+  experts_per_layer = 8
+  hotset_coverage_threshold = 0.75
+}
+
+precision bf16_only {
+  dtype_policy = "bf16"
+  allow = ["bf16"]
+  calibration_required = false
+}
+
+schedule serving {
+  deployment_mode = "balanced"
+  backend_priority = ["cuda", "tilelang", "kt_fallback"]
+  prewarm_policy = "hotset"
+  miss_policy = "fallback"
+}
+
+autotune pareto {
+  objective = "pareto"
+  candidates = ["speed", "memory", "balanced", "safe"]
+}
+
+runtime kt {
+  mode = "verify"
+  fallback_chain = ["bf16", "kt"]
+  gates = ["locality", "correctness"]
+}

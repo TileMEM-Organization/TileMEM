@@ -1,0 +1,62 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import argparse
+from pathlib import Path
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from tilepo.admission.scheduler import AdmissionError, admit_tilepo
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--manifest", action="append", required=True)
+    parser.add_argument("--out-dir", required=True)
+    parser.add_argument("--workloads", required=True)
+    parser.add_argument("--experts", required=True)
+    parser.add_argument("--systems", default="B,C")
+    parser.add_argument("--repeats", type=int, required=True)
+    parser.add_argument(
+        "--policy",
+        choices=["throughput", "tail_latency", "memory_saving", "balanced"],
+        default="balanced",
+    )
+    parser.add_argument("--tie-band", type=float, default=0.01)
+    parser.add_argument("--tok-win-threshold", type=float, default=0.03)
+    parser.add_argument("--require-bf16", action="store_true")
+    args = parser.parse_args()
+
+    try:
+        result = admit_tilepo(
+            manifest_paths=[Path(item) for item in args.manifest],
+            out_dir=Path(args.out_dir),
+            workloads=_parse_csv(args.workloads),
+            experts=_parse_int_csv(args.experts),
+            systems=_parse_csv(args.systems),
+            repeats=args.repeats,
+            policy=args.policy,
+            tie_band=args.tie_band,
+            tok_win_threshold=args.tok_win_threshold,
+            require_bf16=args.require_bf16,
+        )
+    except (AdmissionError, ValueError) as exc:
+        print(f"TilePO admission rejected evidence: {exc}", file=sys.stderr)
+        return 1
+    print(result.summary_path)
+    print(result.selected_plan_path)
+    print(result.markdown_path)
+    return 0
+
+
+def _parse_csv(value: str) -> list[str]:
+    return [item.strip() for item in value.split(",") if item.strip()]
+
+
+def _parse_int_csv(value: str) -> list[int]:
+    return [int(item) for item in _parse_csv(value)]
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

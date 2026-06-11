@@ -1,0 +1,52 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import argparse
+from pathlib import Path
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from tilepo.reporting.ablation import AblationReportError, generate_ablation_report
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--manifest", required=True)
+    parser.add_argument("--out-dir", required=True)
+    parser.add_argument("--workloads", required=True)
+    parser.add_argument("--experts", required=True)
+    parser.add_argument("--policies", required=True)
+    parser.add_argument("--async-modes", required=True)
+    parser.add_argument("--repeats", type=int, required=True)
+    parser.add_argument("--require-real", action="store_true")
+    args = parser.parse_args()
+    try:
+        result = generate_ablation_report(
+            Path(args.manifest),
+            Path(args.out_dir),
+            workloads=_parse_csv(args.workloads),
+            experts=_parse_int_csv(args.experts),
+            policies=_parse_csv(args.policies),
+            async_modes=_parse_csv(args.async_modes),
+            repeats=args.repeats,
+            require_real=args.require_real,
+        )
+    except (AblationReportError, ValueError) as exc:
+        print(f"TilePO V0.1 ablation reporter rejected evidence: {exc}", file=sys.stderr)
+        return 1
+    print(result.summary_path)
+    print(result.markdown_path)
+    return 0
+
+
+def _parse_csv(value: str) -> list[str]:
+    return [item.strip() for item in value.split(",") if item.strip()]
+
+
+def _parse_int_csv(value: str) -> list[int]:
+    return [int(item) for item in _parse_csv(value)]
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

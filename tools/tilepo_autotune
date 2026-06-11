@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+import argparse
+import json
+from pathlib import Path
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from tilepo.autotune import autotune_from_profile
+from tilepo.profiler import profile_directory
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--profile-dir", required=True)
+    parser.add_argument("--out-dir", required=True)
+    parser.add_argument("--workload-label", default="long_output")
+    parser.add_argument("--expert-budgets", default="4,6,8,10,12,16")
+    parser.add_argument("--gpu-cache-budget-gib", type=float, default=8.0)
+    args = parser.parse_args()
+    out_dir = Path(args.out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    budgets = [int(item) for item in args.expert_budgets.split(",") if item]
+    summary = profile_directory(Path(args.profile_dir), args.workload_label, budgets)
+    plans = autotune_from_profile(summary, args.gpu_cache_budget_gib)
+    (out_dir / "profile_summary.json").write_text(json.dumps(summary.to_dict(), indent=2, sort_keys=True) + "\n")
+    (out_dir / "pareto_plans.json").write_text(json.dumps([plan.to_dict() for plan in plans], indent=2, sort_keys=True) + "\n")
+    print(out_dir / "pareto_plans.json")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+

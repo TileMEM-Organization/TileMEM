@@ -1,0 +1,11 @@
+{
+  "created_at_unix": 1781155791.984477,
+  "gate": {
+    "failures": [],
+    "status": "PASS"
+  },
+  "groups": 70,
+  "merged_manifest": "evidence/ablation/tilepo_ablation_manifest.json",
+  "report": "evidence/ablation/tilepo_ablation_report.md",
+  "schema_version": "tilepo_completion_v1"
+}

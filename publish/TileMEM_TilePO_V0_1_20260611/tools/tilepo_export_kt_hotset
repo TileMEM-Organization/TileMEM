@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+import argparse
+from pathlib import Path
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from tilepo.kt_hotset import export_kt_hotset, parse_expert_list
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--source", required=True)
+    parser.add_argument("--out", required=True)
+    parser.add_argument("--summary-out", required=True)
+    parser.add_argument("--workload", required=True)
+    parser.add_argument("--experts", required=True)
+    parser.add_argument("--strategy", default="rank_banded", choices=["rank_banded"])
+    args = parser.parse_args()
+
+    try:
+        export_kt_hotset(
+            Path(args.source),
+            Path(args.out),
+            Path(args.summary_out),
+            workload=args.workload,
+            experts=parse_expert_list(args.experts),
+            strategy=args.strategy,
+        )
+    except ValueError as exc:
+        print(f"TilePO KT hotset export failed: {exc}", file=sys.stderr)
+        return 1
+
+    print(args.out)
+    print(args.summary_out)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

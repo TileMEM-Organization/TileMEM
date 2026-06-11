@@ -1,0 +1,30 @@
+{
+  "baseline_policy": "kt_expert",
+  "expected_rows": 210,
+  "experts": [
+    2,
+    4,
+    6,
+    8,
+    10
+  ],
+  "matrix": "core",
+  "output_tokens": 8,
+  "repeats": 3,
+  "request_count": 5,
+  "schema_version": "tilepo_ablation_run_config_v1",
+  "tilepo_async_modes": [
+    "off",
+    "on"
+  ],
+  "tilepo_policies": [
+    "tilepo_coarse",
+    "tilepo_fine",
+    "tilepo_hybrid"
+  ],
+  "warmup_request_count": 1,
+  "workloads": [
+    "mixed",
+    "long_context"
+  ]
+}

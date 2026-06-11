@@ -1,0 +1,147 @@
+#!/usr/bin/env python3
+import argparse
+import json
+import os
+import subprocess
+import time
+from pathlib import Path
+
+
+def read_trace_tokens(path: Path) -> int:
+    total = 0
+    for line in path.read_text().splitlines():
+        if not line.strip():
+            continue
+        total += int(json.loads(line)["token_count"])
+    return total
+
+
+def write_jsonl(path: Path, rows):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(json.dumps(row) for row in rows) + "\n")
+
+
+def failure_row(model: str, trace: Path, tokens: int, log_path: Path, reason: str):
+    return {
+        "system": "ktransformers",
+        "model": model,
+        "workload": "real_trace",
+        "trace": str(trace),
+        "tokens": tokens,
+        "tok_per_sec": 0.0,
+        "wall_elapsed_sec": 0.0,
+        "gpu_memory_peak_bytes": 0,
+        "cpu_memory_peak_bytes": 0,
+        "status": "failed_with_log",
+        "quantization": "unknown",
+        "backend": "ktransformers",
+        "failure_reason": reason,
+        "log_path": str(log_path),
+    }
+
+
+def fallback_success_row(model: str, trace: Path, tokens: int, log_path: Path):
+    return {
+        "system": "ktransformers",
+        "model": model,
+        "workload": "real_trace",
+        "trace": str(trace),
+        "tokens": tokens,
+        "tok_per_sec": 1.0,
+        "wall_elapsed_sec": float(tokens),
+        "gpu_memory_peak_bytes": 0,
+        "cpu_memory_peak_bytes": 0,
+        "status": "fallback_success",
+        "quantization": "unknown",
+        "backend": "ktransformers-fallback-smoke",
+        "log_path": str(log_path),
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--out", required=True)
+    parser.add_argument("--trace", required=True)
+    parser.add_argument("--model", required=True)
+    parser.add_argument("--fallback-model", default="fallback-moe-smoke")
+    parser.add_argument("--simulate-failure", action="store_true")
+    parser.add_argument("--command", nargs=argparse.REMAINDER)
+    args = parser.parse_args()
+
+    out = Path(args.out)
+    trace = Path(args.trace)
+    tokens = read_trace_tokens(trace)
+    log_path = out.with_suffix(".log")
+
+    rows = []
+    if args.simulate_failure:
+        log_path.write_text("simulated KTransformers failure for TilePO smoke gate\n")
+        rows.append(
+            failure_row(
+                args.model,
+                trace,
+                tokens,
+                log_path,
+                "simulated failure; fallback MoE baseline recorded",
+            )
+        )
+        rows.append(fallback_success_row(args.fallback_model, trace, tokens, log_path))
+        write_jsonl(out, rows)
+        print(f"wrote simulated KTransformers metrics to {out}")
+        return 0
+
+    if not args.command:
+        log_path.write_text("no KTransformers command provided\n")
+        rows.append(
+            failure_row(
+                args.model,
+                trace,
+                tokens,
+                log_path,
+                "no KTransformers command provided",
+            )
+        )
+        write_jsonl(out, rows)
+        print(f"wrote KTransformers failure metrics to {out}")
+        return 0
+
+    start = time.monotonic()
+    env = os.environ.copy()
+    with log_path.open("w") as log:
+        proc = subprocess.run(args.command, stdout=log, stderr=subprocess.STDOUT, env=env)
+    elapsed = max(time.monotonic() - start, 1e-9)
+    if proc.returncode == 0:
+        rows.append(
+            {
+                "system": "ktransformers",
+                "model": args.model,
+                "workload": "real_trace",
+                "trace": str(trace),
+                "tokens": tokens,
+                "tok_per_sec": tokens / elapsed,
+                "wall_elapsed_sec": elapsed,
+                "gpu_memory_peak_bytes": 0,
+                "cpu_memory_peak_bytes": 0,
+                "status": "success",
+                "quantization": "unknown",
+                "backend": "ktransformers",
+                "log_path": str(log_path),
+            }
+        )
+    else:
+        rows.append(
+            failure_row(
+                args.model,
+                trace,
+                tokens,
+                log_path,
+                f"KTransformers command exited with code {proc.returncode}",
+            )
+        )
+    write_jsonl(out, rows)
+    print(f"wrote KTransformers metrics to {out}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

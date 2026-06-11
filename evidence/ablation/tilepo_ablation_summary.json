@@ -1,0 +1,2835 @@
+{
+  "gate": {
+    "failures": [],
+    "status": "PASS"
+  },
+  "groups": [
+    {
+      "async_planning": "off",
+      "experts_per_layer": 2,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.046932220458984375,
+          "median": 0.046688079833984375,
+          "min": 0.046566009521484375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 4.326171875,
+          "median": 4.326171875,
+          "min": 4.326171875
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1986.986529400383,
+          "median": 1938.2407795994368,
+          "min": 1864.985216200148
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 2010.6231786801798,
+          "median": 1941.623191919498,
+          "min": 1876.2266944399744
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 21.274679978711475,
+          "median": 20.740519585264593,
+          "min": 20.634978864688467
+        }
+      },
+      "policy": "kt_expert",
+      "repeats": 3,
+      "system": "B",
+      "workload": "long_context"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 2,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.04708099365234375,
+          "median": 0.0467529296875,
+          "min": 0.046630859375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 4.298828125,
+          "median": 4.298828125,
+          "min": 4.298828125
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1778.2532195997192,
+          "median": 1776.6432129996247,
+          "min": 1724.9047040000733
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1797.0093007199466,
+          "median": 1786.90562499949,
+          "min": 1740.8706792000157
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 23.939764896139437,
+          "median": 23.061312518729835,
+          "min": 22.982146499375894
+        }
+      },
+      "policy": "tilepo_coarse",
+      "repeats": 3,
+      "system": "C",
+      "workload": "long_context"
+    },
+    {
+      "async_planning": "on",
+      "experts_per_layer": 2,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.046833038330078125,
+          "median": 0.04659271240234375,
+          "min": 0.0465850830078125
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 4.298828125,
+          "median": 4.298828125,
+          "min": 4.298828125
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1678.597310798068,
+          "median": 1631.7646094008524,
+          "min": 1630.4699200023606
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1696.518446157279,
+          "median": 1642.8297906804073,
+          "min": 1640.6643056029861
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 25.055816571695917,
+          "median": 24.917699109372684,
+          "min": 24.900541952493672
+        }
+      },
+      "policy": "tilepo_coarse",
+      "repeats": 3,
+      "system": "C",
+      "workload": "long_context"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 2,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.04708099365234375,
+          "median": 0.046962738037109375,
+          "min": 0.04683685302734375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 4.2998046875,
+          "median": 4.2998046875,
+          "min": 4.2998046875
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1649.5377891973476,
+          "median": 1640.7745407981565,
+          "min": 1636.1103681992972
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1664.2855186361703,
+          "median": 1662.5939121568808,
+          "min": 1646.5680880384753
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 25.12797369695059,
+          "median": 24.817817729157536,
+          "min": 24.574011369244854
+        }
+      },
+      "policy": "tilepo_fine",
+      "repeats": 3,
+      "system": "C",
+      "workload": "long_context"
+    },
+    {
+      "async_planning": "on",
+      "experts_per_layer": 2,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.047084808349609375,
+          "median": 0.04705810546875,
+          "min": 0.046840667724609375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 4.3515625,
+          "median": 4.3515625,
+          "min": 4.3515625
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1728.1755581963807,
+          "median": 1653.589735798596,
+          "min": 1644.5411203996628
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1745.6771564355586,
+          "median": 1675.476573559281,
+          "min": 1665.8502240802045
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 25.253387490598556,
+          "median": 24.93332156277472,
+          "min": 24.004079010816113
+        }
+      },
+      "policy": "tilepo_fine",
+      "repeats": 3,
+      "system": "C",
+      "workload": "long_context"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 2,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.04708099365234375,
+          "median": 0.046962738037109375,
+          "min": 0.04671478271484375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 4.3515625,
+          "median": 4.3515625,
+          "min": 4.3515625
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1672.2083921980811,
+          "median": 1656.2872048016288,
+          "min": 1642.3456105985679
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1689.6790960378712,
+          "median": 1668.9741049616714,
+          "min": 1657.7908781182487
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 25.168593979687884,
+          "median": 25.057535202557556,
+          "min": 24.6118034487748
+        }
+      },
+      "policy": "tilepo_hybrid",
+      "repeats": 3,
+      "system": "C",
+      "workload": "long_context"
+    },
+    {
+      "async_planning": "on",
+      "experts_per_layer": 2,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.046955108642578125,
+          "median": 0.0464630126953125,
+          "min": 0.04634857177734375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 4.3515625,
+          "median": 4.3515625,
+          "min": 4.3515625
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1674.8572613971191,
+          "median": 1673.2201712031383,
+          "min": 1626.9639243968413
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1702.2608770776424,
+          "median": 1694.8825798439793,
+          "min": 1636.095368876413
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 24.983474036239485,
+          "median": 24.936638142308137,
+          "min": 24.772657213834588
+        }
+      },
+      "policy": "tilepo_hybrid",
+      "repeats": 3,
+      "system": "C",
+      "workload": "long_context"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 4,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.047176361083984375,
+          "median": 0.04692840576171875,
+          "min": 0.046810150146484375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 4.669921875,
+          "median": 4.669921875,
+          "min": 4.669921875
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1945.4808552000031,
+          "median": 1896.6481872004806,
+          "min": 1857.0261139997456
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1975.0450926403573,
+          "median": 1902.8971574406023,
+          "min": 1874.6805211999163
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 22.04273437901205,
+          "median": 21.20017222763816,
+          "min": 21.1527544804202
+        }
+      },
+      "policy": "kt_expert",
+      "repeats": 3,
+      "system": "B",
+      "workload": "long_context"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 4,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.047077178955078125,
+          "median": 0.04671478271484375,
+          "min": 0.046710968017578125
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 4.6865234375,
+          "median": 4.6865234375,
+          "min": 4.6865234375
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1747.9512929996417,
+          "median": 1698.4165105990542,
+          "min": 1600.9401927993167
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1763.9303689995722,
+          "median": 1710.4358261193556,
+          "min": 1608.416228959104
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 25.13578026146894,
+          "median": 24.22268250462953,
+          "min": 24.118479297508593
+        }
+      },
+      "policy": "tilepo_coarse",
+      "repeats": 3,
+      "system": "C",
+      "workload": "long_context"
+    },
+    {
+      "async_planning": "on",
+      "experts_per_layer": 4,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.0469512939453125,
+          "median": 0.046947479248046875,
+          "min": 0.04683685302734375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 4.685546875,
+          "median": 4.685546875,
+          "min": 4.685546875
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1570.956238200597,
+          "median": 1541.4878427996882,
+          "min": 1523.0491926020477
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1588.1172804403468,
+          "median": 1559.687550959934,
+          "min": 1535.2291433222126
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 26.94799393074275,
+          "median": 26.588985245537838,
+          "min": 26.24638987096471
+        }
+      },
+      "policy": "tilepo_coarse",
+      "repeats": 3,
+      "system": "C",
+      "workload": "long_context"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 4,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.047084808349609375,
+          "median": 0.046844482421875,
+          "min": 0.046840667724609375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 4.6865234375,
+          "median": 4.6865234375,
+          "min": 4.6865234375
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1557.9679307993501,
+          "median": 1551.052954402985,
+          "min": 1510.8166475984035
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1564.0059333585668,
+          "median": 1551.4405412843917,
+          "min": 1519.8592647182522
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 26.900114088644163,
+          "median": 26.801417421158543,
+          "min": 26.300448878270572
+        }
+      },
+      "policy": "tilepo_fine",
+      "repeats": 3,
+      "system": "C",
+      "workload": "long_context"
+    },
+    {
+      "async_planning": "on",
+      "experts_per_layer": 4,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.047084808349609375,
+          "median": 0.0469512939453125,
+          "min": 0.04683685302734375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 4.73828125,
+          "median": 4.73828125,
+          "min": 4.73828125
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1594.4264546022168,
+          "median": 1567.804796200653,
+          "min": 1564.1605870026979
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1608.7154669230222,
+          "median": 1583.9411328404094,
+          "min": 1577.3376758032828
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 26.2909400363392,
+          "median": 26.26615044718982,
+          "min": 25.86222600564291
+        }
+      },
+      "policy": "tilepo_fine",
+      "repeats": 3,
+      "system": "C",
+      "workload": "long_context"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 4,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.046955108642578125,
+          "median": 0.04683685302734375,
+          "min": 0.046833038330078125
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 4.73828125,
+          "median": 4.73828125,
+          "min": 4.73828125
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1587.412238601246,
+          "median": 1550.9088371953112,
+          "min": 1539.023942395579
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1603.3007765217917,
+          "median": 1563.546190635825,
+          "min": 1544.0704212745186
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 26.590386683538597,
+          "median": 26.575759171259474,
+          "min": 26.068911052954128
+        }
+      },
+      "policy": "tilepo_hybrid",
+      "repeats": 3,
+      "system": "C",
+      "workload": "long_context"
+    },
+    {
+      "async_planning": "on",
+      "experts_per_layer": 4,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.04695892333984375,
+          "median": 0.046955108642578125,
+          "min": 0.046833038330078125
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 4.9033203125,
+          "median": 4.9033203125,
+          "min": 4.9033203125
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1660.1239920026273,
+          "median": 1647.9738273963449,
+          "min": 1567.7218018012354
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1689.1436864019486,
+          "median": 1657.0557926761103,
+          "min": 1583.9380019617965
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 26.045864864857744,
+          "median": 25.50279303748958,
+          "min": 25.26414242666548
+        }
+      },
+      "policy": "tilepo_hybrid",
+      "repeats": 3,
+      "system": "C",
+      "workload": "long_context"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 6,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.047054290771484375,
+          "median": 0.046932220458984375,
+          "min": 0.04680633544921875
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.044921875,
+          "median": 5.044921875,
+          "min": 5.044921875
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1840.4150803995435,
+          "median": 1830.3488018005737,
+          "min": 1829.2855264015088
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1851.1335368794971,
+          "median": 1833.4456532816694,
+          "min": 1831.6912819605204
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 22.061290490261893,
+          "median": 21.829649485072505,
+          "min": 21.80799571853729
+        }
+      },
+      "policy": "kt_expert",
+      "repeats": 3,
+      "system": "B",
+      "workload": "long_context"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 6,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.04695892333984375,
+          "median": 0.04695892333984375,
+          "min": 0.046840667724609375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.0458984375,
+          "median": 5.0458984375,
+          "min": 5.0458984375
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1751.8068154000503,
+          "median": 1644.201475000591,
+          "min": 1623.780454199732
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1774.6196470801078,
+          "median": 1660.4800190008245,
+          "min": 1638.9386684393685
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 25.78782064947639,
+          "median": 25.6013458153053,
+          "min": 24.920999606158627
+        }
+      },
+      "policy": "tilepo_coarse",
+      "repeats": 3,
+      "system": "C",
+      "workload": "long_context"
+    },
+    {
+      "async_planning": "on",
+      "experts_per_layer": 6,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.047199249267578125,
+          "median": 0.047077178955078125,
+          "min": 0.0468292236328125
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.044921875,
+          "median": 5.044921875,
+          "min": 5.044921875
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1583.5204070019245,
+          "median": 1508.602024600259,
+          "min": 1495.700637801201
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1594.0263014023367,
+          "median": 1518.3042873203522,
+          "min": 1509.7111291612964
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 28.16590230875126,
+          "median": 28.009354706607645,
+          "min": 27.017907135435703
+        }
+      },
+      "policy": "tilepo_coarse",
+      "repeats": 3,
+      "system": "C",
+      "workload": "long_context"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 6,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.04744720458984375,
+          "median": 0.047084808349609375,
+          "min": 0.04695892333984375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.447265625,
+          "median": 5.2216796875,
+          "min": 5.1923828125
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 6271.304647400391,
+          "median": 1690.997751201212,
+          "min": 1578.245816002891
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 7040.925963081536,
+          "median": 1720.686373441422,
+          "min": 1599.2474512037006
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 26.741056342193723,
+          "median": 26.16964034483828,
+          "min": 12.576068621545174
+        }
+      },
+      "policy": "tilepo_fine",
+      "repeats": 3,
+      "system": "C",
+      "workload": "long_context"
+    },
+    {
+      "async_planning": "on",
+      "experts_per_layer": 6,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.046722412109375,
+          "median": 0.046718597412109375,
+          "min": 0.046718597412109375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.09765625,
+          "median": 5.09765625,
+          "min": 5.09765625
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1537.5774435975472,
+          "median": 1513.2980621958268,
+          "min": 1510.6165641976986
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1554.8814935176051,
+          "median": 1528.9308184362017,
+          "min": 1528.4251068360754
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 28.401278730038417,
+          "median": 28.00343886044214,
+          "min": 27.612553157045703
+        }
+      },
+      "policy": "tilepo_fine",
+      "repeats": 3,
+      "system": "C",
+      "workload": "long_context"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 6,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.047077178955078125,
+          "median": 0.046840667724609375,
+          "min": 0.046718597412109375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.09765625,
+          "median": 5.09765625,
+          "min": 5.09765625
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1589.988026797073,
+          "median": 1577.25086260034,
+          "min": 1545.6076911941636
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1609.176824556198,
+          "median": 1595.9515941192512,
+          "min": 1558.8293174339924
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 27.835625042319716,
+          "median": 27.564249937429302,
+          "min": 26.560415898849616
+        }
+      },
+      "policy": "tilepo_hybrid",
+      "repeats": 3,
+      "system": "C",
+      "workload": "long_context"
+    },
+    {
+      "async_planning": "on",
+      "experts_per_layer": 6,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.05220794677734375,
+          "median": 0.047321319580078125,
+          "min": 0.04683685302734375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.796875,
+          "median": 5.46875,
+          "min": 5.4619140625
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 10682.133592398895,
+          "median": 1677.2951022008783,
+          "min": 1609.5543597999495
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 12219.581460078769,
+          "median": 1692.6293908417574,
+          "min": 1630.2343183592893
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 26.731104870359548,
+          "median": 25.175191925481077,
+          "min": 8.60823665190959
+        }
+      },
+      "policy": "tilepo_hybrid",
+      "repeats": 3,
+      "system": "C",
+      "workload": "long_context"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 8,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.04669189453125,
+          "median": 0.046688079833984375,
+          "min": 0.0465087890625
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.419921875,
+          "median": 5.419921875,
+          "min": 5.419921875
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 2055.8782906009583,
+          "median": 2021.8658556012085,
+          "min": 2003.813959200488
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 2115.900064521702,
+          "median": 2092.66687112191,
+          "min": 2070.139495040494
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 22.44098620984672,
+          "median": 22.224986148192365,
+          "min": 21.995324141497672
+        }
+      },
+      "policy": "kt_expert",
+      "repeats": 3,
+      "system": "B",
+      "workload": "long_context"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 8,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.04695892333984375,
+          "median": 0.04695892333984375,
+          "min": 0.046710968017578125
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.419921875,
+          "median": 5.419921875,
+          "min": 5.419921875
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1569.2164702013542,
+          "median": 1557.2719916002825,
+          "min": 1518.7682559990208
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1584.395830041467,
+          "median": 1580.472868719953,
+          "min": 1536.5346767983283
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 27.189799422651518,
+          "median": 26.993149827405105,
+          "min": 26.39932564088951
+        }
+      },
+      "policy": "tilepo_coarse",
+      "repeats": 3,
+      "system": "C",
+      "workload": "long_context"
+    },
+    {
+      "async_planning": "on",
+      "experts_per_layer": 8,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.047199249267578125,
+          "median": 0.04695892333984375,
+          "min": 0.0468292236328125
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.419921875,
+          "median": 5.419921875,
+          "min": 5.419921875
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1446.013843799301,
+          "median": 1435.8493681953405,
+          "min": 1416.9730248002452
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1469.6186887592194,
+          "median": 1451.399842434621,
+          "min": 1435.2414865608444
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 29.166560876787468,
+          "median": 29.150223244374786,
+          "min": 29.074674898870573
+        }
+      },
+      "policy": "tilepo_coarse",
+      "repeats": 3,
+      "system": "C",
+      "workload": "long_context"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 8,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.047084808349609375,
+          "median": 0.046962738037109375,
+          "min": 0.04695892333984375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.4765625,
+          "median": 5.47265625,
+          "min": 5.47265625
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1527.2723722009687,
+          "median": 1432.7851421985542,
+          "min": 1420.5342511995696
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1541.8455856415676,
+          "median": 1449.4770060380688,
+          "min": 1430.5138462397736
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 29.046493601115372,
+          "median": 29.008141004612714,
+          "min": 27.60550342025757
+        }
+      },
+      "policy": "tilepo_fine",
+      "repeats": 3,
+      "system": "C",
+      "workload": "long_context"
+    },
+    {
+      "async_planning": "on",
+      "experts_per_layer": 8,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.047084808349609375,
+          "median": 0.04695892333984375,
+          "min": 0.04671478271484375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.47265625,
+          "median": 5.47265625,
+          "min": 5.47265625
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1449.264110600052,
+          "median": 1448.1799163972028,
+          "min": 1425.6267661985476
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1469.4831573191914,
+          "median": 1460.0018056761473,
+          "min": 1437.7539988374338
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 28.962618940614313,
+          "median": 28.774492251901314,
+          "min": 28.62382857654106
+        }
+      },
+      "policy": "tilepo_fine",
+      "repeats": 3,
+      "system": "C",
+      "workload": "long_context"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 8,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.0469970703125,
+          "median": 0.046962738037109375,
+          "min": 0.04695892333984375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.47265625,
+          "median": 5.47265625,
+          "min": 5.47265625
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1457.3002655946766,
+          "median": 1436.8432684001164,
+          "min": 1423.6930651968578
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1476.8499723137938,
+          "median": 1452.7504880799097,
+          "min": 1443.370557835442
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 29.278378909604786,
+          "median": 28.97316536339543,
+          "min": 28.54471456718367
+        }
+      },
+      "policy": "tilepo_hybrid",
+      "repeats": 3,
+      "system": "C",
+      "workload": "long_context"
+    },
+    {
+      "async_planning": "on",
+      "experts_per_layer": 8,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.047199249267578125,
+          "median": 0.04708099365234375,
+          "min": 0.0467071533203125
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.84375,
+          "median": 5.84375,
+          "min": 5.84375
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1552.3530630031019,
+          "median": 1540.5863666019286,
+          "min": 1533.1765380004072
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1577.9164062030031,
+          "median": 1567.1204885220504,
+          "min": 1549.3139300009352
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 27.473546629323604,
+          "median": 26.894362316218555,
+          "min": 26.775417528827262
+        }
+      },
+      "policy": "tilepo_hybrid",
+      "repeats": 3,
+      "system": "C",
+      "workload": "long_context"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 10,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.04693603515625,
+          "median": 0.046932220458984375,
+          "min": 0.04674530029296875
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.794921875,
+          "median": 5.794921875,
+          "min": 5.794921875
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 2087.2523792007996,
+          "median": 2052.2289746011666,
+          "min": 1907.7309946005698
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 2165.928989441163,
+          "median": 2128.0528325210616,
+          "min": 1964.246104520862
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 23.400115668868416,
+          "median": 22.504501367696882,
+          "min": 22.418282185617823
+        }
+      },
+      "policy": "kt_expert",
+      "repeats": 3,
+      "system": "B",
+      "workload": "long_context"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 10,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.046844482421875,
+          "median": 0.046840667724609375,
+          "min": 0.04671478271484375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.794921875,
+          "median": 5.794921875,
+          "min": 5.794921875
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1639.0001135994678,
+          "median": 1613.9016355984495,
+          "min": 1577.869341198675
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1708.471597119351,
+          "median": 1672.051705518097,
+          "min": 1633.8742554390046
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 28.557796252684213,
+          "median": 28.404602528248518,
+          "min": 27.967021952284178
+        }
+      },
+      "policy": "tilepo_coarse",
+      "repeats": 3,
+      "system": "C",
+      "workload": "long_context"
+    },
+    {
+      "async_planning": "on",
+      "experts_per_layer": 10,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.046962738037109375,
+          "median": 0.04683685302734375,
+          "min": 0.04683685302734375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.7958984375,
+          "median": 5.7958984375,
+          "min": 5.794921875
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1665.9797571992385,
+          "median": 1650.2603213943075,
+          "min": 1610.3702724038155
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1732.4419218391995,
+          "median": 1712.4613466742449,
+          "min": 1664.6692592848558
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 27.93329942536842,
+          "median": 27.885873737138393,
+          "min": 27.828320990845665
+        }
+      },
+      "policy": "tilepo_coarse",
+      "repeats": 3,
+      "system": "C",
+      "workload": "long_context"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 10,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.04708099365234375,
+          "median": 0.04695892333984375,
+          "min": 0.046955108642578125
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.84765625,
+          "median": 5.84765625,
+          "min": 5.84765625
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1650.477835597121,
+          "median": 1650.28932599962,
+          "min": 1581.6144958051152
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1708.1347163990724,
+          "median": 1708.0781839165138,
+          "min": 1634.7624047653517
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 28.50523464007251,
+          "median": 27.90279377763099,
+          "min": 27.896674077093586
+        }
+      },
+      "policy": "tilepo_fine",
+      "repeats": 3,
+      "system": "C",
+      "workload": "long_context"
+    },
+    {
+      "async_planning": "on",
+      "experts_per_layer": 10,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.04695892333984375,
+          "median": 0.04695892333984375,
+          "min": 0.04671478271484375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.84765625,
+          "median": 5.84765625,
+          "min": 5.84765625
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1653.8757427959351,
+          "median": 1611.5205249996504,
+          "min": 1567.6917655990108
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1725.2158125551066,
+          "median": 1659.44844260026,
+          "min": 1622.3661611185526
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 28.98434515240539,
+          "median": 28.24321307991773,
+          "min": 28.070995506700843
+        }
+      },
+      "policy": "tilepo_fine",
+      "repeats": 3,
+      "system": "C",
+      "workload": "long_context"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 10,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.04708099365234375,
+          "median": 0.046840667724609375,
+          "min": 0.04683685302734375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.84765625,
+          "median": 5.84765625,
+          "min": 5.84765625
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1660.0977035981487,
+          "median": 1634.1510472004302,
+          "min": 1618.4135115981917
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1724.120911117352,
+          "median": 1696.2212958408054,
+          "min": 1672.2529439182836
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 28.00831581488831,
+          "median": 27.933327806117045,
+          "min": 27.89677547797158
+        }
+      },
+      "policy": "tilepo_hybrid",
+      "repeats": 3,
+      "system": "C",
+      "workload": "long_context"
+    },
+    {
+      "async_planning": "on",
+      "experts_per_layer": 10,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.046962738037109375,
+          "median": 0.046875,
+          "min": 0.04683685302734375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 6.21875,
+          "median": 6.21875,
+          "min": 6.21875
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1793.3459278036023,
+          "median": 1706.8868063986881,
+          "min": 1703.9927124016685
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1872.8473959644907,
+          "median": 1775.5188232817454,
+          "min": 1762.4267836779472
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 26.9788021993479,
+          "median": 26.912894020066375,
+          "min": 26.697204204509738
+        }
+      },
+      "policy": "tilepo_hybrid",
+      "repeats": 3,
+      "system": "C",
+      "workload": "long_context"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 2,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.05292510986328125,
+          "median": 0.046817779541015625,
+          "min": 0.046817779541015625
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 4.32421875,
+          "median": 4.32421875,
+          "min": 4.32421875
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 2019.7206856006228,
+          "median": 1141.3119415992696,
+          "min": 1130.6218288002128
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 2148.2294811207976,
+          "median": 1196.924306719302,
+          "min": 1185.8122681600798
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 18.720282302832917,
+          "median": 18.46732138925705,
+          "min": 12.466910312150745
+        }
+      },
+      "policy": "kt_expert",
+      "repeats": 3,
+      "system": "B",
+      "workload": "mixed"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 2,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.04697418212890625,
+          "median": 0.046840667724609375,
+          "min": 0.046588897705078125
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 4.296875,
+          "median": 4.296875,
+          "min": 4.296875
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1149.8189161997288,
+          "median": 1131.4381206007963,
+          "min": 1098.000875598518
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1201.0424848395633,
+          "median": 1189.6386033210729,
+          "min": 1146.1609167186543
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 18.78463337735346,
+          "median": 18.66830398112904,
+          "min": 18.583869259009454
+        }
+      },
+      "policy": "tilepo_coarse",
+      "repeats": 3,
+      "system": "C",
+      "workload": "mixed"
+    },
+    {
+      "async_planning": "on",
+      "experts_per_layer": 2,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.04708099365234375,
+          "median": 0.04708099365234375,
+          "min": 0.04708099365234375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 4.296875,
+          "median": 4.296875,
+          "min": 4.296875
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1074.979285801237,
+          "median": 1065.6547242004306,
+          "min": 1064.1664859977027
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1122.2226307619712,
+          "median": 1119.6600912409485,
+          "min": 1117.095740397781
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 19.93155766380331,
+          "median": 19.833754987822665,
+          "min": 19.466737756286722
+        }
+      },
+      "policy": "tilepo_coarse",
+      "repeats": 3,
+      "system": "C",
+      "workload": "mixed"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 2,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.04708099365234375,
+          "median": 0.04671478271484375,
+          "min": 0.04671478271484375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 4.2978515625,
+          "median": 4.2978515625,
+          "min": 4.2978515625
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1072.3883852013385,
+          "median": 1071.2005146007868,
+          "min": 1036.7862610029988
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1126.9823658419773,
+          "median": 1117.7516221205587,
+          "min": 1088.0497522046787
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 20.49559540826159,
+          "median": 19.82847715228065,
+          "min": 19.474627586638125
+        }
+      },
+      "policy": "tilepo_fine",
+      "repeats": 3,
+      "system": "C",
+      "workload": "mixed"
+    },
+    {
+      "async_planning": "on",
+      "experts_per_layer": 2,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.046840667724609375,
+          "median": 0.046833038330078125,
+          "min": 0.04671478271484375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 4.349609375,
+          "median": 4.349609375,
+          "min": 4.349609375
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1072.7323337996495,
+          "median": 1066.5215878019808,
+          "min": 1054.0310856027643
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1117.8744359622942,
+          "median": 1109.4020203585387,
+          "min": 1097.834969923424
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 19.775823122488784,
+          "median": 19.76618230835288,
+          "min": 19.503151058326992
+        }
+      },
+      "policy": "tilepo_fine",
+      "repeats": 3,
+      "system": "C",
+      "workload": "mixed"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 2,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.04708099365234375,
+          "median": 0.046875,
+          "min": 0.04683685302734375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 4.349609375,
+          "median": 4.349609375,
+          "min": 4.349609375
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1102.585704800731,
+          "median": 1055.9702324026148,
+          "min": 1052.0237509976141
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1161.8943137596943,
+          "median": 1112.9279480825062,
+          "min": 1108.6162605974823
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 20.545375771948944,
+          "median": 20.42263917995295,
+          "min": 19.567048210666854
+        }
+      },
+      "policy": "tilepo_hybrid",
+      "repeats": 3,
+      "system": "C",
+      "workload": "mixed"
+    },
+    {
+      "async_planning": "on",
+      "experts_per_layer": 2,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.046722412109375,
+          "median": 0.046596527099609375,
+          "min": 0.04659271240234375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 4.349609375,
+          "median": 4.349609375,
+          "min": 4.349609375
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1169.4620055990526,
+          "median": 1084.900903198286,
+          "min": 1078.779289202066
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1223.1743163178908,
+          "median": 1139.3480846373131,
+          "min": 1137.0537554426119
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 19.849307427795463,
+          "median": 19.55420204217437,
+          "min": 18.245161029847036
+        }
+      },
+      "policy": "tilepo_hybrid",
+      "repeats": 3,
+      "system": "C",
+      "workload": "mixed"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 4,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.047191619873046875,
+          "median": 0.04706573486328125,
+          "min": 0.04694366455078125
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 4.66796875,
+          "median": 4.66796875,
+          "min": 4.66796875
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1176.8684234011744,
+          "median": 1167.3628671982442,
+          "min": 1129.0190983996579
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1233.0703294814157,
+          "median": 1224.4701246378827,
+          "min": 1182.6590228795976
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 18.794925232502134,
+          "median": 18.184947011529562,
+          "min": 17.9584298295534
+        }
+      },
+      "policy": "kt_expert",
+      "repeats": 3,
+      "system": "B",
+      "workload": "mixed"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 4,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.04708099365234375,
+          "median": 0.04695892333984375,
+          "min": 0.046710968017578125
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 4.6845703125,
+          "median": 4.6845703125,
+          "min": 4.68359375
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1125.3214872005628,
+          "median": 1123.440798597585,
+          "min": 1106.479118999414
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1185.1315725172753,
+          "median": 1171.5382726403188,
+          "min": 1166.771280599496
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 19.767410356345362,
+          "median": 19.29223158000963,
+          "min": 19.151033368048285
+        }
+      },
+      "policy": "tilepo_coarse",
+      "repeats": 3,
+      "system": "C",
+      "workload": "mixed"
+    },
+    {
+      "async_planning": "on",
+      "experts_per_layer": 4,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.047084808349609375,
+          "median": 0.04683685302734375,
+          "min": 0.046718597412109375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 4.68359375,
+          "median": 4.68359375,
+          "min": 4.68359375
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1041.7071536001458,
+          "median": 1030.1816041996062,
+          "min": 1014.1343974013579
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1077.523592319776,
+          "median": 1068.6177008396771,
+          "min": 1068.1257698812988
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 21.18836945015105,
+          "median": 21.075501402638572,
+          "min": 20.398199737048465
+        }
+      },
+      "policy": "tilepo_coarse",
+      "repeats": 3,
+      "system": "C",
+      "workload": "mixed"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 4,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.047206878662109375,
+          "median": 0.046955108642578125,
+          "min": 0.04683685302734375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 4.6845703125,
+          "median": 4.6845703125,
+          "min": 4.6845703125
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1127.806181399501,
+          "median": 1053.9856745992438,
+          "min": 1005.8981163994758
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1166.3928258797387,
+          "median": 1088.7734613197972,
+          "min": 1063.8295600793208
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 21.95038025629022,
+          "median": 20.36583043164998,
+          "min": 19.028435005112083
+        }
+      },
+      "policy": "tilepo_fine",
+      "repeats": 3,
+      "system": "C",
+      "workload": "mixed"
+    },
+    {
+      "async_planning": "on",
+      "experts_per_layer": 4,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.047084808349609375,
+          "median": 0.046962738037109375,
+          "min": 0.04695892333984375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 4.736328125,
+          "median": 4.736328125,
+          "min": 4.736328125
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1170.7367281996994,
+          "median": 1083.220213399909,
+          "min": 1050.8006303964066
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1234.3574840386282,
+          "median": 1124.2982498797937,
+          "min": 1082.940292476851
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 20.653556720371597,
+          "median": 20.124926543935313,
+          "min": 19.37612781510208
+        }
+      },
+      "policy": "tilepo_fine",
+      "repeats": 3,
+      "system": "C",
+      "workload": "mixed"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 4,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.047084808349609375,
+          "median": 0.04683685302734375,
+          "min": 0.046833038330078125
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 4.736328125,
+          "median": 4.736328125,
+          "min": 4.736328125
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1081.6781229979824,
+          "median": 1042.985690201749,
+          "min": 1009.7575628009507
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1119.3583725986537,
+          "median": 1082.7928428415908,
+          "min": 1061.988843761792
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 21.43918055541006,
+          "median": 21.13016905758351,
+          "min": 19.96678360241345
+        }
+      },
+      "policy": "tilepo_hybrid",
+      "repeats": 3,
+      "system": "C",
+      "workload": "mixed"
+    },
+    {
+      "async_planning": "on",
+      "experts_per_layer": 4,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.04720306396484375,
+          "median": 0.046875,
+          "min": 0.046833038330078125
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 4.9013671875,
+          "median": 4.9013671875,
+          "min": 4.736328125
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 4925.771000195527,
+          "median": 1022.9752531988197,
+          "min": 1022.6946827984647
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 5302.810039233882,
+          "median": 1084.0217978393775,
+          "min": 1056.9317045580829
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 21.64140290310656,
+          "median": 21.317914900495435,
+          "min": 6.772752199970198
+        }
+      },
+      "policy": "tilepo_hybrid",
+      "repeats": 3,
+      "system": "C",
+      "workload": "mixed"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 6,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.046947479248046875,
+          "median": 0.04669952392578125,
+          "min": 0.046573638916015625
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.04296875,
+          "median": 5.04296875,
+          "min": 5.04296875
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1148.17769700021,
+          "median": 1141.296185198007,
+          "min": 1073.9473487999928
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1203.3778498001627,
+          "median": 1195.2259970380692,
+          "min": 1124.9427601594653
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 19.525264011326094,
+          "median": 18.520895586128013,
+          "min": 18.32580201682175
+        }
+      },
+      "policy": "kt_expert",
+      "repeats": 3,
+      "system": "B",
+      "workload": "mixed"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 6,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.047077178955078125,
+          "median": 0.047077178955078125,
+          "min": 0.04683685302734375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.0439453125,
+          "median": 5.0439453125,
+          "min": 5.0439453125
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1045.9911330006432,
+          "median": 1041.886259400053,
+          "min": 1040.4538451992264
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1105.3448402011416,
+          "median": 1099.263455879991,
+          "min": 1094.8352122389767
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 21.193542853877595,
+          "median": 21.157758467512974,
+          "min": 20.931670208413976
+        }
+      },
+      "policy": "tilepo_coarse",
+      "repeats": 3,
+      "system": "C",
+      "workload": "mixed"
+    },
+    {
+      "async_planning": "on",
+      "experts_per_layer": 6,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.046962738037109375,
+          "median": 0.04671478271484375,
+          "min": 0.046611785888671875
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.04296875,
+          "median": 5.04296875,
+          "min": 5.04296875
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 990.7029906004027,
+          "median": 961.3504845990973,
+          "min": 945.9283809985209
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1023.2133701206476,
+          "median": 1012.2140441193186,
+          "min": 985.1728249980079
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 22.745135165970698,
+          "median": 22.586577770776756,
+          "min": 21.140038969453013
+        }
+      },
+      "policy": "tilepo_coarse",
+      "repeats": 3,
+      "system": "C",
+      "workload": "mixed"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 6,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.05086517333984375,
+          "median": 0.04708099365234375,
+          "min": 0.04683685302734375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.228515625,
+          "median": 5.2197265625,
+          "min": 5.0439453125
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 5420.437996397958,
+          "median": 1113.717350801744,
+          "min": 964.53484960075
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 5839.607383277034,
+          "median": 1155.4585909613525,
+          "min": 1013.6216699209762
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 22.587425529446158,
+          "median": 18.64527495948998,
+          "min": 5.476481991299041
+        }
+      },
+      "policy": "tilepo_fine",
+      "repeats": 3,
+      "system": "C",
+      "workload": "mixed"
+    },
+    {
+      "async_planning": "on",
+      "experts_per_layer": 6,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.047199249267578125,
+          "median": 0.047084808349609375,
+          "min": 0.046833038330078125
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.095703125,
+          "median": 5.095703125,
+          "min": 5.095703125
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 984.4050532003166,
+          "median": 958.8926508004079,
+          "min": 950.1453526012482
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1022.0781866408653,
+          "median": 1003.2682085613487,
+          "min": 993.9816969211097
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 22.662279161241564,
+          "median": 22.404225658713187,
+          "min": 21.992302097390223
+        }
+      },
+      "policy": "tilepo_fine",
+      "repeats": 3,
+      "system": "C",
+      "workload": "mixed"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 6,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.046962738037109375,
+          "median": 0.04695892333984375,
+          "min": 0.0467529296875
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.095703125,
+          "median": 5.095703125,
+          "min": 5.095703125
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 995.5974667987903,
+          "median": 995.0200597959338,
+          "min": 994.4661697998525
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1045.9971503558336,
+          "median": 1038.1941883600664,
+          "min": 1036.6281213590992
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 22.151247912470346,
+          "median": 21.927302792974984,
+          "min": 21.53593751425587
+        }
+      },
+      "policy": "tilepo_hybrid",
+      "repeats": 3,
+      "system": "C",
+      "workload": "mixed"
+    },
+    {
+      "async_planning": "on",
+      "experts_per_layer": 6,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.04720306396484375,
+          "median": 0.046955108642578125,
+          "min": 0.046833038330078125
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.77734375,
+          "median": 5.494140625,
+          "min": 5.2607421875
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1108.9414714006125,
+          "median": 1103.1572986001263,
+          "min": 1007.3973739985375
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1153.661169319239,
+          "median": 1130.6935454820632,
+          "min": 1052.6082491979469
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 21.599941986572723,
+          "median": 19.596423801602032,
+          "min": 18.311549267726647
+        }
+      },
+      "policy": "tilepo_hybrid",
+      "repeats": 3,
+      "system": "C",
+      "workload": "mixed"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 8,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.04694366455078125,
+          "median": 0.04682159423828125,
+          "min": 0.04657745361328125
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.41796875,
+          "median": 5.41796875,
+          "min": 5.41796875
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1217.085365398816,
+          "median": 1199.9864782002987,
+          "min": 1174.9875230016187
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1217.3770634784887,
+          "median": 1211.5484388405457,
+          "min": 1178.895277401898
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 17.54091708335423,
+          "median": 17.310206729408154,
+          "min": 16.997836627822274
+        }
+      },
+      "policy": "kt_expert",
+      "repeats": 3,
+      "system": "B",
+      "workload": "mixed"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 8,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.046962738037109375,
+          "median": 0.04695892333984375,
+          "min": 0.046955108642578125
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.4189453125,
+          "median": 5.4189453125,
+          "min": 5.4189453125
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1076.6490548005095,
+          "median": 1058.5552708005707,
+          "min": 1015.4641461987922
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1123.417327760253,
+          "median": 1098.4800333609746,
+          "min": 1065.2894636381825
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 21.659576273000717,
+          "median": 19.824559229806688,
+          "min": 19.74107693475433
+        }
+      },
+      "policy": "tilepo_coarse",
+      "repeats": 3,
+      "system": "C",
+      "workload": "mixed"
+    },
+    {
+      "async_planning": "on",
+      "experts_per_layer": 8,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.04695892333984375,
+          "median": 0.046840667724609375,
+          "min": 0.04683685302734375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.41796875,
+          "median": 5.41796875,
+          "min": 5.41796875
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 981.8613871997512,
+          "median": 957.248990998778,
+          "min": 918.8403201995242
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1026.4475454391504,
+          "median": 1009.3538053988595,
+          "min": 958.3595608391624
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 22.7700133842756,
+          "median": 22.511312892093922,
+          "min": 21.762519229233053
+        }
+      },
+      "policy": "tilepo_coarse",
+      "repeats": 3,
+      "system": "C",
+      "workload": "mixed"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 8,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.04695892333984375,
+          "median": 0.04683685302734375,
+          "min": 0.04671478271484375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 6.0732421875,
+          "median": 6.072265625,
+          "min": 6.0009765625
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1029.0362122002987,
+          "median": 992.3800768039655,
+          "min": 976.456521404907
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1086.6942736401688,
+          "median": 1043.7766657653265,
+          "min": 1022.7071634854657
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 22.123300581904083,
+          "median": 21.457506760559426,
+          "min": 21.079104715615326
+        }
+      },
+      "policy": "tilepo_fine",
+      "repeats": 3,
+      "system": "C",
+      "workload": "mixed"
+    },
+    {
+      "async_planning": "on",
+      "experts_per_layer": 8,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.046955108642578125,
+          "median": 0.046875,
+          "min": 0.046840667724609375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.470703125,
+          "median": 5.470703125,
+          "min": 5.470703125
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 966.9547874000273,
+          "median": 964.2313686010311,
+          "min": 921.0403719989699
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1019.5754638800281,
+          "median": 988.3248137214105,
+          "min": 965.1199319996522
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 22.887010859479926,
+          "median": 22.74876887703461,
+          "min": 21.057166668927326
+        }
+      },
+      "policy": "tilepo_fine",
+      "repeats": 3,
+      "system": "C",
+      "workload": "mixed"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 8,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.04720306396484375,
+          "median": 0.047077178955078125,
+          "min": 0.046840667724609375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.470703125,
+          "median": 5.470703125,
+          "min": 5.470703125
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1015.4400500003248,
+          "median": 977.8529753995826,
+          "min": 970.4635805959696
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1048.4613075992092,
+          "median": 1013.5468721154028,
+          "min": 995.5155478796223
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 22.028272515281802,
+          "median": 20.72881583189276,
+          "min": 20.513236834883504
+        }
+      },
+      "policy": "tilepo_hybrid",
+      "repeats": 3,
+      "system": "C",
+      "workload": "mixed"
+    },
+    {
+      "async_planning": "on",
+      "experts_per_layer": 8,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.046993255615234375,
+          "median": 0.046840667724609375,
+          "min": 0.04683685302734375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.841796875,
+          "median": 5.841796875,
+          "min": 5.841796875
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1324.3002777977379,
+          "median": 1061.9077450028271,
+          "min": 1023.3935607975582
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1372.3572227568366,
+          "median": 1102.0748450027895,
+          "min": 1057.9062241566135
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 20.012985341735654,
+          "median": 19.79565317817267,
+          "min": 17.225205377754126
+        }
+      },
+      "policy": "tilepo_hybrid",
+      "repeats": 3,
+      "system": "C",
+      "workload": "mixed"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 10,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.047061920166015625,
+          "median": 0.04694366455078125,
+          "min": 0.04682159423828125
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.79296875,
+          "median": 5.79296875,
+          "min": 5.79296875
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1124.7660920016642,
+          "median": 1094.086427197908,
+          "min": 1073.2232657974237
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1130.200740001601,
+          "median": 1102.334233437432,
+          "min": 1083.6247147570248
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 18.947501494663154,
+          "median": 18.849225269753916,
+          "min": 18.22178360758748
+        }
+      },
+      "policy": "kt_expert",
+      "repeats": 3,
+      "system": "B",
+      "workload": "mixed"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 10,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.04708099365234375,
+          "median": 0.046955108642578125,
+          "min": 0.046833038330078125
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.79296875,
+          "median": 5.79296875,
+          "min": 5.79296875
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1122.274808002112,
+          "median": 1094.1217624014826,
+          "min": 1085.0939417992777
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1150.2397376022418,
+          "median": 1101.4686364817317,
+          "min": 1088.0554099591973
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 19.771360892778084,
+          "median": 19.497998831397574,
+          "min": 19.258498380707877
+        }
+      },
+      "policy": "tilepo_coarse",
+      "repeats": 3,
+      "system": "C",
+      "workload": "mixed"
+    },
+    {
+      "async_planning": "on",
+      "experts_per_layer": 10,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.047077178955078125,
+          "median": 0.046955108642578125,
+          "min": 0.046875
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.79296875,
+          "median": 5.79296875,
+          "min": 5.79296875
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1281.1014678009087,
+          "median": 1094.3239318046835,
+          "min": 1026.0734488008893
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1325.0064263615059,
+          "median": 1116.1389087655698,
+          "min": 1034.4573969612247
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 21.194921309419517,
+          "median": 20.039762706058674,
+          "min": 18.477044532151034
+        }
+      },
+      "policy": "tilepo_coarse",
+      "repeats": 3,
+      "system": "C",
+      "workload": "mixed"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 10,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.04720306396484375,
+          "median": 0.047199249267578125,
+          "min": 0.04683685302734375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.845703125,
+          "median": 5.845703125,
+          "min": 5.845703125
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1053.1891673992504,
+          "median": 1051.9395580035052,
+          "min": 1014.6246673990391
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1073.352724679571,
+          "median": 1056.0374100049376,
+          "min": 1024.457568678481
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 21.517424159183076,
+          "median": 21.289315336342195,
+          "min": 20.107652899211065
+        }
+      },
+      "policy": "tilepo_fine",
+      "repeats": 3,
+      "system": "C",
+      "workload": "mixed"
+    },
+    {
+      "async_planning": "on",
+      "experts_per_layer": 10,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.047206878662109375,
+          "median": 0.04683685302734375,
+          "min": 0.046833038330078125
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.845703125,
+          "median": 5.845703125,
+          "min": 5.845703125
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1176.5995337991626,
+          "median": 1018.2870874021319,
+          "min": 1016.6578639982617
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1212.1172379600466,
+          "median": 1022.0226670827832,
+          "min": 1020.0515943972277
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 21.076220089640717,
+          "median": 20.80947186608881,
+          "min": 19.35237062621859
+        }
+      },
+      "policy": "tilepo_fine",
+      "repeats": 3,
+      "system": "C",
+      "workload": "mixed"
+    },
+    {
+      "async_planning": "off",
+      "experts_per_layer": 10,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.04708099365234375,
+          "median": 0.04708099365234375,
+          "min": 0.046947479248046875
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 5.845703125,
+          "median": 5.845703125,
+          "min": 5.845703125
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1073.832684001536,
+          "median": 1048.3426810023957,
+          "min": 1031.8939032018534
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1094.9961928027915,
+          "median": 1048.7291818033555,
+          "min": 1041.348183041846
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 21.462588336937078,
+          "median": 20.312338195080056,
+          "min": 20.18369115834189
+        }
+      },
+      "policy": "tilepo_hybrid",
+      "repeats": 3,
+      "system": "C",
+      "workload": "mixed"
+    },
+    {
+      "async_planning": "on",
+      "experts_per_layer": 10,
+      "metrics": {
+        "cpu_ram_peak_gib": {
+          "count": 3,
+          "max": 0.047084808349609375,
+          "median": 0.047084808349609375,
+          "min": 0.047084808349609375
+        },
+        "gpu_peak_gib": {
+          "count": 3,
+          "max": 6.216796875,
+          "median": 6.216796875,
+          "min": 6.216796875
+        },
+        "p95_ms": {
+          "count": 3,
+          "max": 1057.8622564004036,
+          "median": 1057.428590800555,
+          "min": 940.8465915999841
+        },
+        "p99_ms": {
+          "count": 3,
+          "max": 1069.8384552804055,
+          "median": 1067.7999437597464,
+          "min": 952.1541791199706
+        },
+        "tok_per_sec": {
+          "count": 3,
+          "max": 22.423488572143,
+          "median": 20.875415794766806,
+          "min": 20.466235445895638
+        }
+      },
+      "policy": "tilepo_hybrid",
+      "repeats": 3,
+      "system": "C",
+      "workload": "mixed"
+    }
+  ],
+  "requested": {
+    "async_modes": [
+      "off",
+      "on"
+    ],
+    "experts": [
+      2,
+      4,
+      6,
+      8,
+      10
+    ],
+    "policies": [
+      "kt_expert",
+      "tilepo_coarse",
+      "tilepo_fine",
+      "tilepo_hybrid"
+    ],
+    "repeats": 3,
+    "require_real": true,
+    "workloads": [
+      "mixed",
+      "long_context"
+    ]
+  },
+  "schema_version": "tilepo_ablation_report_v1",
+  "source_manifest": "evidence/ablation/tilepo_ablation_manifest.json"
+}

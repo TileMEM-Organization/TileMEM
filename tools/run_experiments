@@ -1,0 +1,133 @@
+#!/usr/bin/env python3
+import argparse
+import json
+import shutil
+import subprocess
+import sys
+import tomllib
+from pathlib import Path
+
+
+POLICIES = [
+    "on_demand",
+    "lru",
+    "layerwise_prefetch",
+    "oracle",
+    "tilemem",
+    "tilemem_no_conflict",
+    "tilemem_no_dram_cache",
+    "tilemem_no_hbm_prefetch",
+    "tilemem_no_eviction_regret",
+    "tilemem_no_deadline",
+]
+
+
+def repo_root() -> Path:
+    return Path(__file__).resolve().parents[1]
+
+
+def write_runtime_config(path: Path, hbm: int, dram: int, lookahead: int, metrics_dir: Path):
+    path.write_text(
+        "\n".join(
+            [
+                "[hardware]",
+                f"hbm_budget_bytes = {hbm}",
+                f"dram_budget_bytes = {dram}",
+                "",
+                "[io]",
+                "queue_depth = 8",
+                "",
+                "[tiles]",
+                "tile_bytes = 1024",
+                "",
+                "[scheduler]",
+                'policy = "tilemem"',
+                f"lookahead = {lookahead}",
+                "prefetch_depth = 4",
+                "hbm_high_watermark = 0.93",
+                "dram_high_watermark = 0.90",
+                "",
+                "[cuda]",
+                "m = 16",
+                "k = 64",
+                "n = 32",
+                "",
+                "[paths]",
+                'expert_file = "experts.bin"',
+                'manifest = "manifest.jsonl"',
+                'trace = "trace.jsonl"',
+                f'metrics_dir = "{metrics_dir}"',
+                "",
+            ]
+        )
+    )
+
+
+def run(cmd, cwd: Path):
+    print("+", " ".join(str(c) for c in cmd))
+    subprocess.run([str(c) for c in cmd], cwd=cwd, check=True)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--config", required=True)
+    parser.add_argument("--build-dir", default="build")
+    parser.add_argument("--out", default="build/results")
+    args = parser.parse_args()
+
+    root = repo_root()
+    build_dir = root / args.build_dir
+    out = root / args.out
+    cfg = tomllib.loads((root / args.config).read_text())
+
+    workload = cfg.get("experiment", {}).get("workload", "synthetic")
+    lookahead = int(cfg.get("scheduler", {}).get("lookahead", 4))
+    hbm_budgets = cfg["budgets"]["hbm_budget_bytes"]
+    dram_budgets = cfg["budgets"]["dram_budget_bytes"]
+    if len(hbm_budgets) != len(dram_budgets):
+      raise ValueError("hbm_budget_bytes and dram_budget_bytes must have same length")
+
+    generator = build_dir / "tilemem_generate_demo_data"
+    replay = build_dir / "tilemem_replay"
+    if not generator.exists() or not replay.exists():
+        raise FileNotFoundError("build tilemem binaries before running experiments")
+
+    workload_out = out / workload
+    if workload_out.exists():
+        shutil.rmtree(workload_out)
+    workload_out.mkdir(parents=True, exist_ok=True)
+
+    rows = []
+    for index, (hbm, dram) in enumerate(zip(hbm_budgets, dram_budgets)):
+        budget_name = f"budget_{index}_hbm{hbm}_dram{dram}"
+        budget_dir = workload_out / budget_name
+        data_dir = budget_dir / "data"
+        metrics_dir = budget_dir / "metrics"
+        runtime_config = budget_dir / "runtime.toml"
+        data_dir.mkdir(parents=True, exist_ok=True)
+        metrics_dir.mkdir(parents=True, exist_ok=True)
+        write_runtime_config(runtime_config, hbm, dram, lookahead, metrics_dir)
+        run([generator, "--config", runtime_config, "--out", data_dir, "--workload", workload], root)
+        for policy in POLICIES:
+            run([replay, "--config", runtime_config, "--data-root", data_dir, "--policy", policy], root)
+            metrics_path = metrics_dir / f"{policy}.json"
+            metrics = json.loads(metrics_path.read_text())
+            metrics.update(
+                {
+                    "workload": workload,
+                    "budget": budget_name,
+                    "hbm_budget_bytes": hbm,
+                    "dram_budget_bytes": dram,
+                    "policy": policy,
+                    "metrics_path": str(metrics_path.relative_to(root)),
+                }
+            )
+            rows.append(metrics)
+
+    (workload_out / "raw_metrics.json").write_text(json.dumps(rows, indent=2))
+    print(f"wrote {workload_out / 'raw_metrics.json'}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

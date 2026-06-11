@@ -1,0 +1,33 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import argparse
+from pathlib import Path
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from tilepo.ablation import write_tilepo_plan
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--base-plan", required=True)
+    parser.add_argument("--out", required=True)
+    parser.add_argument("--experts", type=int, required=True)
+    parser.add_argument("--policy", choices=["tilepo_coarse", "tilepo_fine", "tilepo_hybrid"], required=True)
+    parser.add_argument("--async-planning", choices=["off", "on"], required=True)
+    args = parser.parse_args()
+    output = write_tilepo_plan(
+        args.base_plan,
+        args.out,
+        expert_budget=args.experts,
+        policy=args.policy,
+        async_planning=args.async_planning == "on",
+    )
+    print(output)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

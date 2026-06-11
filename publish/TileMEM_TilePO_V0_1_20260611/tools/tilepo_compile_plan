@@ -1,0 +1,25 @@
+#!/usr/bin/env python3
+import argparse
+from pathlib import Path
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from tilepo.compiler import compile_plan
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--plan", required=True)
+    parser.add_argument("--out-dir", required=True)
+    args = parser.parse_args()
+    result = compile_plan(Path(args.plan), Path(args.out_dir))
+    print(result.mir_path)
+    print(result.manifest_path)
+    print(result.compiled_plan_path)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+

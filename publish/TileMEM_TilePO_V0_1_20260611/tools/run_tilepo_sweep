@@ -1,0 +1,91 @@
+#!/usr/bin/env python3
+import argparse
+from pathlib import Path
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from tilepo.sweep import run_sweep
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--mode", choices=["shadow", "verify", "serve"], required=True)
+    parser.add_argument("--c-mode", choices=["hook", "kt_native"], default="hook")
+    parser.add_argument("--plan", required=True)
+    parser.add_argument("--out-dir", required=True)
+    parser.add_argument("--workloads", default="")
+    parser.add_argument("--experts", default="")
+    parser.add_argument("--systems", default="")
+    parser.add_argument("--repeats", type=int, default=3)
+    parser.add_argument("--require-real", action="store_true")
+    parser.add_argument("--dry-run-commands", action="store_true")
+    parser.add_argument("--execute", action="store_true")
+    parser.add_argument("--base-port", type=int, default=34000)
+    parser.add_argument("--model-dir", default="/mnt/d/tilemem_runtime/models/OLMoE-1B-7B-0924-Instruct")
+    parser.add_argument(
+        "--init-expert-location",
+        default="/mnt/d/tilemem_runtime/results/kt_tilemem_hotset_20260523/tilemem_hotset_counts.pt",
+    )
+    parser.add_argument(
+        "--c-init-expert-location",
+        default="",
+        help="Optional System C-only KT frequency init path; B keeps --init-expert-location.",
+    )
+    parser.add_argument("--kt-env", default="tilemem-tilepo-ktransformers")
+    parser.add_argument("--bench-tool", default="")
+    parser.add_argument("--request-count", type=int, default=4)
+    parser.add_argument("--warmup-request-count", type=int, default=2)
+    parser.add_argument("--output-tokens", type=int, default=4)
+    parser.add_argument("--startup-timeout-sec", type=int, default=900)
+    parser.add_argument("--min-c-free-gib", type=float, default=20.0)
+    parser.add_argument("--min-d-free-gib", type=float, default=20.0)
+    parser.add_argument("--max-host-commit-percent", type=float, default=95.0)
+    parser.add_argument("--max-vmmem-gib", type=float, default=0.0)
+    parser.add_argument("--min-linux-available-gib", type=float, default=8.0)
+    parser.add_argument("--skip-existing-success", action="store_true")
+    parser.add_argument("--ablation-policy", default="")
+    parser.add_argument("--async-planning-mode", default="")
+    args = parser.parse_args()
+    if args.execute and args.dry_run_commands:
+        raise SystemExit("--execute and --dry-run-commands are mutually exclusive")
+    workloads = [item for item in args.workloads.split(",") if item] or None
+    experts = [int(item) for item in args.experts.split(",") if item] or None
+    systems = [item for item in args.systems.split(",") if item] or None
+    result = run_sweep(
+        args.mode,
+        Path(args.plan),
+        Path(args.out_dir),
+        workloads,
+        experts,
+        args.repeats,
+        args.require_real,
+        dry_run_commands=args.dry_run_commands,
+        execute=args.execute,
+        base_port=args.base_port,
+        model_dir=args.model_dir,
+        init_path=args.init_expert_location,
+        c_init_path=args.c_init_expert_location or None,
+        kt_env=args.kt_env,
+        bench_tool=Path(args.bench_tool) if args.bench_tool else None,
+        systems=systems,
+        request_count=args.request_count,
+        warmup_request_count=args.warmup_request_count,
+        output_tokens=args.output_tokens,
+        startup_timeout_sec=args.startup_timeout_sec,
+        min_c_free_gib=args.min_c_free_gib,
+        min_d_free_gib=args.min_d_free_gib,
+        max_host_commit_percent=args.max_host_commit_percent,
+        max_vmmem_gib=args.max_vmmem_gib,
+        min_linux_available_gib=args.min_linux_available_gib,
+        skip_existing_success=args.skip_existing_success,
+        c_mode=args.c_mode,
+        ablation_policy=args.ablation_policy,
+        async_planning_mode=args.async_planning_mode,
+    )
+    print(result["manifest_path"])
+    return 2 if result.get("blocked") and args.require_real else 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

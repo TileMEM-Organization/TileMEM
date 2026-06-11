@@ -1,0 +1,42 @@
+#!/usr/bin/env python3
+import argparse
+import json
+import shutil
+import subprocess
+import sys
+from pathlib import Path
+
+
+def probe(cmd):
+    try:
+        return subprocess.check_output(cmd, text=True).strip()
+    except Exception as exc:
+        return f"unavailable: {exc}"
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--out", required=True)
+    parser.add_argument("--env-name", default="tilemem-tilepo-ktransformers")
+    parser.add_argument("--python", default="3.11")
+    args = parser.parse_args()
+
+    conda = shutil.which("conda")
+    info = {
+        "env_name": args.env_name,
+        "requested_python": args.python,
+        "current_python": sys.version.split()[0],
+        "conda": conda or "missing",
+        "nvidia_smi": probe(["nvidia-smi", "--query-gpu=name,memory.total,compute_cap", "--format=csv,noheader"]),
+        "status": "ready_to_create" if conda else "conda_missing",
+        "create_command": f"conda create -n {args.env_name} python={args.python}",
+    }
+    out = Path(args.out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(info, indent=2) + "\n")
+    print(f"wrote environment probe to {out}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

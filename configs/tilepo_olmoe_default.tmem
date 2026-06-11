@@ -1,0 +1,49 @@
+model olmoe {
+  layers = 16
+  experts_per_layer = 64
+  hidden_size = 2048
+  intermediate_size = 8192
+}
+
+workload long_output {
+  label = "long_output"
+}
+
+tile moe_tiles {
+  hidden_tile = 128
+  intermediate_tile = 256
+  shard_count = 4
+  projection_groups = ["gate_up", "down"]
+}
+
+memory ram_vram {
+  gpu_cache_budget_gib = 8.0
+  cpu_cache_budget_gib = 64.0
+  experts_per_layer = 8
+  hotset_coverage_threshold = 0.75
+}
+
+precision lowbit {
+  dtype_policy = "mixed"
+  allow = ["bf16", "fp8", "mxfp4"]
+  calibration_required = true
+}
+
+schedule serving {
+  deployment_mode = "balanced"
+  backend_priority = ["cuda", "tilelang", "kt_fallback"]
+  prewarm_policy = "hotset"
+  miss_policy = "fallback"
+}
+
+autotune pareto {
+  objective = "pareto"
+  candidates = ["speed", "memory", "balanced", "safe"]
+}
+
+runtime kt {
+  mode = "verify"
+  fallback_chain = ["mxfp4", "fp8", "bf16", "kt"]
+  gates = ["locality", "correctness", "calibration"]
+}
+

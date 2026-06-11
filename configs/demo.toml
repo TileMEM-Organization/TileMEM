@@ -1,0 +1,24 @@
+[hardware]
+hbm_budget_bytes = 16777216
+dram_budget_bytes = 16777216
+
+[io]
+queue_depth = 8
+
+[tiles]
+tile_bytes = 1024
+
+[scheduler]
+policy = "tilemem"
+lookahead = 2
+
+[cuda]
+m = 16
+k = 64
+n = 32
+
+[paths]
+expert_file = "experts.bin"
+manifest = "manifest.jsonl"
+trace = "trace.jsonl"
+metrics_dir = "build/metrics"

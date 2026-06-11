@@ -1,0 +1,44 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import argparse
+from pathlib import Path
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from tilepo.admission.finalizer import FinalizerError, finalize_tilepo_deployment
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--selected-plan", required=True)
+    parser.add_argument("--fallback-plan", required=True)
+    parser.add_argument("--admission-report", required=True)
+    parser.add_argument("--extra-file", action="append", default=[])
+    parser.add_argument("--manifest", action="append", required=True)
+    parser.add_argument("--out-dir", required=True)
+    parser.add_argument("--release-name", required=True)
+    args = parser.parse_args()
+
+    try:
+        result = finalize_tilepo_deployment(
+            selected_plan_path=Path(args.selected_plan),
+            fallback_plan_path=Path(args.fallback_plan),
+            admission_report_path=Path(args.admission_report),
+            extra_paths=[Path(item) for item in args.extra_file],
+            manifest_paths=[Path(item) for item in args.manifest],
+            out_dir=Path(args.out_dir),
+            release_name=args.release_name,
+        )
+    except (FinalizerError, ValueError) as exc:
+        print(f"TilePO deployment finalizer rejected package: {exc}", file=sys.stderr)
+        return 1
+    print(result.manifest_path)
+    print(result.readme_path)
+    print(result.claim_checklist_path)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

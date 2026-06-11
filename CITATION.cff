@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use TileMEM / TilePO, please cite this software artifact."
+title: "TileMEM TilePO v0.1: BF16 Profile-Guided Tile-Level Placement/Admission for MoE Serving"
+version: "v0.1-priority-2026-06-11"
+date-released: "2026-06-11"
+authors:
+  - name: "TerminusAkivili"
+repository-code: "https://github.com/TerminusAkivili/TileMEM"
+url: "https://github.com/TerminusAkivili/TileMEM"
+abstract: "TilePO is a BF16 profile-guided tile-level placement/admission system for MoE serving, released as a public priority artifact with V0.1 same-budget KT ablation evidence."
+keywords:
+  - MoE serving
+  - tile-level placement
+  - BF16 inference
+  - GPU memory
+  - admission control
+license: MIT

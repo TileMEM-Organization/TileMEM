@@ -11,7 +11,47 @@ placement/admission system for high-throughput MoE serving.
 This repository is the V0.1 priority artifact for TilePO. It contains the
 method description, source code, V0.1 evidence, public manifests, reproducibility
 scripts, and checksum tooling needed to make the result public, citable, and
-verifiable .
+verifiable.
+
+## Technical Report
+
+- PDF: [TileMEM / TilePO V0.1 Technical Report](paper/TileMEM_TilePO_V0_1_Technical_Report.pdf)
+- Source: [paper/tilemem_tilepo_v0_1_technical_report.md](paper/tilemem_tilepo_v0_1_technical_report.md)
+- Rebuild command: `python3 paper/build_tilemem_tilepo_report.py`
+
+The report summarizes the TileMEM implementation architecture, the TilePO
+VRAM/DRAM tile-placement motivation, V0.1 BF16 same-budget results, claim
+boundaries, reproducibility path, and public priority record.
+
+## Priority Record
+
+TileMEM / TilePO V0.1 was publicly released as a priority artifact on
+2026-06-11.
+
+- GitHub release: [v0.1-priority-2026-06-11](https://github.com/TerminusAkivili/TileMEM/releases/tag/v0.1-priority-2026-06-11)
+- Zenodo DOI: [10.5281/zenodo.20646195](https://doi.org/10.5281/zenodo.20646195)
+- Zenodo concept DOI: `10.5281/zenodo.20646194`
+- Software Heritage SWHID: `swh:1:snp:073ee68e366c28f478e81db109056b68f9b146ab`
+- Release tarball SHA256: `4592f09fb451c5d0fe998d9f4fb83ab774100ddba72dc580ef1c5772b7b70f3b`
+
+This priority record is backed by the public GitHub release, Zenodo archive,
+Software Heritage snapshot, and SHA256 checksum. It is independent of arXiv,
+ChinaXiv, OSF, or TechRxiv acceptance.
+
+## Citation
+
+If you use TileMEM / TilePO, please cite the V0.1 Zenodo artifact:
+
+```bibtex
+@software{tilemem_tilepo_v0_1_2026,
+  title   = {TileMEM TilePO v0.1: BF16 Profile-Guided Tile-Level Placement/Admission for MoE Serving},
+  author  = {TerminusAkivili},
+  year    = {2026},
+  version = {v0.1-priority-2026-06-11},
+  doi     = {10.5281/zenodo.20646195},
+  url     = {https://github.com/TerminusAkivili/TileMEM}
+}
+```
 
 ## What TilePO Claims
 
@@ -127,33 +167,6 @@ TileMEM / TilePO uses several open-source systems projects:
 
 We thank the maintainers and contributors of these projects for making open
 infrastructure available to the systems research community.
-
-## Priority Path
-
-V0.1 is designed for this priority chain:
-
-1. public GitHub repository;
-2. GitHub tag and release: `v0.1-priority-2026-06-11`;
-3. Zenodo DOI for the release archive;
-4. Software Heritage SWHID plus SHA256 checksums.
-
-See [docs/tilemem_tilepo_v0_1_priority_roadmap_20260611.md](docs/tilemem_tilepo_v0_1_priority_roadmap_20260611.md).
-
-## Citation
-
-Before Zenodo DOI is minted:
-
-```bibtex
-@software{tilemem_tilepo_v0_1_2026,
-  title   = {TileMEM TilePO v0.1: BF16 Profile-Guided Tile-Level Placement/Admission for MoE Serving},
-  author  = {TerminusAkivili},
-  year    = {2026},
-  version = {v0.1-priority-2026-06-11},
-  url     = {https://github.com/TerminusAkivili/TileMEM}
-}
-```
-
-After Zenodo release, replace `url` with the DOI field in `CITATION.cff`.
 
 ## License
 

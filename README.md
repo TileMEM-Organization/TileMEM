@@ -4,9 +4,9 @@
 
 # TileMEM / TilePO
 
-TileMEM is an open MoE serving optimization project. TilePO is its BF16
-profile-guided tile-level placement/admission system for high-throughput MoE
-serving.
+TileMEM is an open MoE serving optimization project. TilePO, short for
+Tile-level Placement Optimization, is its BF16 profile-guided tile-level
+placement/admission system for high-throughput MoE serving.
 
 This repository is the V0.1 priority artifact for TilePO. It contains the
 method description, source code, V0.1 evidence, public manifests, reproducibility

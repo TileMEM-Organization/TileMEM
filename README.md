@@ -113,6 +113,21 @@ examples/         User-facing quickstarts.
 publish/          Generated release packet.
 ```
 
+## Upstream Projects
+
+TileMEM / TilePO uses several open-source systems projects:
+
+- [KTransformers](https://github.com/kvcache-ai/ktransformers): used as the
+  KT-native BF16 serving baseline and expert-placement path in the V0.1
+  artifact.
+- [SGLang](https://github.com/sgl-project/sglang): used as part of the serving
+  shell and runtime integration context.
+- [TileLang](https://github.com/tile-ai/tilelang): used as a tile-programming
+  and research-lowering reference for TileMEM's tile-level planning direction.
+
+We thank the maintainers and contributors of these projects for making open
+infrastructure available to the systems research community.
+
 ## Priority Path
 
 V0.1 is designed for this priority chain:

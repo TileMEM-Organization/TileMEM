@@ -49,18 +49,13 @@ Gate: PASS
 Serving precision: BF16 / KT-native path
 ```
 
-| Workload | Experts | Best TilePO vs KT tok/s | p95 improvement |
-| --- | ---: | ---: | ---: |
-| `long_context` | 2 | +20.81% | +15.81% |
-| `long_context` | 4 | +26.42% | +18.73% |
-| `long_context` | 6 | +28.31% | +17.58% |
-| `long_context` | 8 | +31.16% | +29.14% |
-| `long_context` | 10 | +26.22% | +21.47% |
-| `mixed` | 2 | +10.59% | +7.48% |
-| `mixed` | 4 | +17.23% | +12.37% |
-| `mixed` | 6 | +21.95% | +15.98% |
-| `mixed` | 8 | +31.42% | +20.23% |
-| `mixed` | 10 | +12.95% | +6.93% |
+<p align="center">
+  <img src="docs/assets/tilepo-throughput-improvement.png" alt="TilePO throughput improvement over KT across expert budgets" width="860">
+</p>
+
+<p align="center">
+  <img src="docs/assets/tilepo-p95-improvement.png" alt="TilePO p95 latency improvement over KT across expert budgets" width="860">
+</p>
 
 ## Quickstart: Offline Verification
 

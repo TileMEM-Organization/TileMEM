@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/assets/tilemem-tilepo-logo.png" alt="TileMEM TilePO logo" width="760">
+  <img src="docs/assets/tilemem-logo.png" alt="TileMEM logo" width="760">
 </p>
 
 # TileMEM / TilePO

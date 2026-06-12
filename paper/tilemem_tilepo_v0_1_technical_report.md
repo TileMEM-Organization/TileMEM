@@ -1,10 +1,10 @@
 # TileMEM / TilePO V0.1 Technical Report
 
-**Subtitle:** BF16 profile-guided tile-level placement/admission for MoE serving  
-**Date:** 2026-06-12  
-**Project:** TileMEM  
-**System:** TilePO, Tile-level Placement Optimization  
-**Release:** v0.1-priority-2026-06-11  
+**Subtitle:** BF16 profile-guided tile-level placement/admission for MoE serving<br>
+**Date:** 2026-06-12<br>
+**Project:** TileMEM<br>
+**System:** TilePO, Tile-level Placement Optimization<br>
+**Release:** v0.1-priority-2026-06-11<br>
 
 ## Abstract
 
@@ -265,4 +265,3 @@ TileMEM uses and studies ideas in the ecosystem around KTransformers, SGLang,
 and TileLang. The V0.1 artifact thanks those upstream projects for making MoE
 serving, serving-system integration, and tile-oriented kernel research easier to
 study in the open.
-

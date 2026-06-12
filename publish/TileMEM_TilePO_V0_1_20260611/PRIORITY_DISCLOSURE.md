@@ -1,9 +1,10 @@
 # TilePO Priority Disclosure
 
-**Disclosure date:** 2026-06-11  
-**Project:** TileMEM  
-**Algorithm/system:** TilePO  
-**Release target:** `v0.1-priority-2026-06-11`
+**Disclosure date:** 2026-06-11<br>
+**Project:** TileMEM<br>
+**Algorithm/system:** TilePO<br>
+**Primary release target:** `v0.1-priority-2026-06-11`<br>
+**Current PDF-included record:** `v0.1.1-pdf-2026-06-12`
 
 ## Disclosure Statement
 
@@ -12,10 +13,12 @@ serving. It uses workload/profile evidence and fixed expert budgets to choose
 how expert weights should be admitted, retained, or organized at tile granularity
 while preserving a KT-native BF16 serving path.
 
-The purpose of this V0.1 release is to establish a public priority record for
-the TilePO idea, implementation shape, benchmark evidence, public manifests, and
-reproducibility path. This release is not dependent on arXiv, ChinaXiv, OSF, or
-TechRxiv acceptance.
+The purpose of the V0.1 priority release is to establish a public priority
+record for the TilePO idea, implementation shape, benchmark evidence, public
+manifests, and reproducibility path. The later V0.1.1 PDF-included record adds
+the generated technical report PDF to the archived artifact chain while
+preserving the original V0.1 priority anchor. These records are not dependent on
+arXiv, ChinaXiv, OSF, or TechRxiv acceptance.
 
 ## Safe Priority Claim
 
@@ -70,15 +73,29 @@ V0.1 supports the following precise claim:
 
 ## Public Identifiers
 
-These identifiers are fixed or filled after the public release step:
+Original priority anchor, 2026-06-11:
 
 ```text
 GitHub repository: https://github.com/TerminusAkivili/TileMEM
-GitHub release:    pending after GitHub release publication
+GitHub release:    https://github.com/TerminusAkivili/TileMEM/releases/tag/v0.1-priority-2026-06-11
 Git tag:           v0.1-priority-2026-06-11
-Zenodo DOI:        pending after Zenodo archive publication
-SWHID:             pending after Software Heritage archive
-Tarball SHA256:    see publish/TileMEM_TilePO_V0_1_20260611.tar.gz.sha256
+Zenodo DOI:        https://doi.org/10.5281/zenodo.20646195
+Concept DOI:       10.5281/zenodo.20646194
+SWHID:             swh:1:snp:073ee68e366c28f478e81db109056b68f9b146ab
+Tarball SHA256:    4592f09fb451c5d0fe998d9f4fb83ab774100ddba72dc580ef1c5772b7b70f3b
+```
+
+Current PDF-included record, 2026-06-12:
+
+```text
+GitHub release:    https://github.com/TerminusAkivili/TileMEM/releases/tag/v0.1.1-pdf-2026-06-12
+Git tag:           v0.1.1-pdf-2026-06-12
+Git commit:        b864a2375e7f05ce41200a43c90c2016fd738590
+Zenodo DOI:        https://doi.org/10.5281/zenodo.20648132
+Concept DOI:       10.5281/zenodo.20646194
+SWHID:             swh:1:snp:1b8b452d7fc26b52c53ae79a2dcfed0e98984389
+PDF SHA256:        97aef412b58835eeed318aeb4a439aec4e87990252f92dfb0e2adac1cae770d7
+Tarball SHA256:    e48a32ddfa081a7ab4a327fa56044abd6eb8c0abba75666e5db8438ea91db5dc
 ```
 
 ## Verification

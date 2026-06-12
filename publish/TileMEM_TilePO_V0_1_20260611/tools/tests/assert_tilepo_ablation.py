@@ -52,7 +52,7 @@ def main() -> int:
         base = Path("configs/tilepo_olmoe_bf16_only.tmem")
 
         manifests = {}
-        for policy in ("tilepo_coarse", "tilepo_fine", "tilepo_hybrid"):
+        for policy in ("tilepo_coarse", "tilepo_fine", "tilepo_hybrid", "tilepo_adaptive"):
             plan = root / f"{policy}.tmem"
             plan.write_text(render_tilepo_plan(base, expert_budget=6, policy=policy, async_planning=True))
             compiled = compile_plan(plan, root / f"compiled_{policy}")
@@ -66,7 +66,30 @@ def main() -> int:
         coarse_tiles = manifests["tilepo_coarse"]["tilepo_plan"]["tile_count"]
         fine_tiles = manifests["tilepo_fine"]["tilepo_plan"]["tile_count"]
         hybrid_tiles = manifests["tilepo_hybrid"]["tilepo_plan"]["tile_count"]
+        adaptive_tiles = manifests["tilepo_adaptive"]["tilepo_plan"]["tile_count"]
+        fine_dispatch = manifests["tilepo_fine"]["tilepo_plan"]["estimated_dispatch_units"]
         assert coarse_tiles < hybrid_tiles < fine_tiles, (coarse_tiles, hybrid_tiles, fine_tiles)
+        assert coarse_tiles < adaptive_tiles < fine_tiles, (coarse_tiles, adaptive_tiles, fine_tiles)
+        adaptive_plan = manifests["tilepo_adaptive"]["tilepo_plan"]
+        assert adaptive_plan["adaptive_mode"] == "throughput"
+        assert adaptive_plan["adaptive_objective"] == "maximize_throughput_minus_metadata_dispatch_and_tail_penalty"
+        assert adaptive_plan["hot_expert_budget"] == 3
+        assert adaptive_plan["warm_expert_budget"] == 2
+        assert adaptive_plan["cold_expert_budget"] == 1
+        assert adaptive_plan["estimated_tile_count"] == adaptive_tiles
+        assert adaptive_plan["estimated_dispatch_units"] < fine_dispatch * 0.70
+        assert 0.49 < adaptive_plan["coarse_equivalent_hot_ratio"] < 0.51
+        segments = {segment["name"]: segment for segment in adaptive_plan["adaptive_segments"]}
+        assert segments["hot"]["shape"] == "coarse"
+        assert segments["hot"]["shard_count"] == 1
+        assert segments["warm"]["shape"] == "medium"
+        assert segments["cold"]["shape"] == "fine"
+        hot_tile_ids = [
+            tile for tile in manifests["tilepo_adaptive"]["tile_ids"].values()
+            if tile["expert"] < adaptive_plan["hot_expert_budget"]
+        ]
+        assert hot_tile_ids
+        assert all(tile["shard_id"] == 0 for tile in hot_tile_ids)
 
         runtime = TileMEMRuntime(manifests["tilepo_fine"], {}, mode=RuntimeMode.SERVE)
         request = {"topk": [(0, 0)], "require_tilemem": True}

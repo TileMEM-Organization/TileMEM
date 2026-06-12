@@ -204,6 +204,19 @@ tools/tilemem tmap predict --summary evidence/ablation/tilepo_ablation_summary.j
 The CLI is intentionally an orchestration entrypoint. Kernel authors and Python
 integrators should still use `import tilemem as TM` for in-process integration.
 
+## Agent Skills
+
+TileMEM ships Codex Agent Skills under [.codex/skills](.codex/skills) so future
+agents can follow the project boundaries consistently:
+
+- `tilemem-environment-setup`: configure and verify a local checkout without
+  forcing GPU/CMake or large checkpoint downloads.
+- `tilemem-acceleration-path`: connect MoE checkpoints to TileMEM, then use
+  TilePO/TMAP with dry-run artifacts and same-budget KT comparisons.
+- `tilemem-backend-precision-path`: extend FP8/F6/F4 backend metadata and
+  external-kernel integration while preserving BF16/KT fallback and claim
+  boundaries.
+
 ### Core Python API Examples
 
 The top-level SDK currently exposes 61 public symbols. Most users only need the

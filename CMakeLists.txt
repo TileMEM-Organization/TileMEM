@@ -62,5 +62,6 @@ add_test(NAME tilepo_ablation COMMAND python3 ${CMAKE_SOURCE_DIR}/tools/tests/as
 add_test(NAME tmap_prediction COMMAND python3 ${CMAKE_SOURCE_DIR}/tools/tests/assert_tmap.py)
 add_test(NAME tilemem_python_sdk COMMAND python3 ${CMAKE_SOURCE_DIR}/tools/tests/assert_tilemem_sdk.py)
 add_test(NAME tilemem_cli COMMAND python3 ${CMAKE_SOURCE_DIR}/tools/tests/assert_tilemem_cli.py)
+add_test(NAME tilemem_agent_skills COMMAND python3 ${CMAKE_SOURCE_DIR}/tools/tests/assert_agent_skills.py)
 add_test(NAME tilemem_checkpoint_integration COMMAND python3 ${CMAKE_SOURCE_DIR}/tools/tests/assert_checkpoint_integration.py)
 add_test(NAME tilemem_industrial_quickstart COMMAND python3 ${CMAKE_SOURCE_DIR}/tools/tests/assert_tilemem_industrial_quickstart.py)

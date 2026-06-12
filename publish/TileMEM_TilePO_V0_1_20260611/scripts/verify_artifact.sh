@@ -5,6 +5,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
 python3 -m compileall -q tilemem tilepo TMAP
+python3 tools/tests/assert_agent_skills.py
 python3 tools/tests/assert_tilemem_sdk.py
 python3 tools/tests/assert_tilemem_cli.py
 python3 tools/tests/assert_checkpoint_integration.py
@@ -20,6 +21,12 @@ bash scripts/reproduce_ablation.sh
 PACKAGE_DIR="publish/TileMEM_TilePO_V0_1_20260611"
 for required in \
   "$PACKAGE_DIR/TMAP/README.md" \
+  "$PACKAGE_DIR/.codex/skills/tilemem-environment-setup/SKILL.md" \
+  "$PACKAGE_DIR/.codex/skills/tilemem-environment-setup/agents/openai.yaml" \
+  "$PACKAGE_DIR/.codex/skills/tilemem-acceleration-path/SKILL.md" \
+  "$PACKAGE_DIR/.codex/skills/tilemem-acceleration-path/agents/openai.yaml" \
+  "$PACKAGE_DIR/.codex/skills/tilemem-backend-precision-path/SKILL.md" \
+  "$PACKAGE_DIR/.codex/skills/tilemem-backend-precision-path/agents/openai.yaml" \
   "$PACKAGE_DIR/docs/customer_integration_end_to_end_example_20260613.md" \
   "$PACKAGE_DIR/docs/tilemem_checkpoint_integration.md" \
   "$PACKAGE_DIR/docs/tilemem_python_sdk_quickstart.md" \
@@ -39,6 +46,7 @@ for required in \
   "$PACKAGE_DIR/kernels/gemm_fp4.cu" \
   "$PACKAGE_DIR/tools/benchmark_olmoe_integration_interface" \
   "$PACKAGE_DIR/tools/tilemem" \
+  "$PACKAGE_DIR/tools/tests/assert_agent_skills.py" \
   "$PACKAGE_DIR/tools/tests/assert_integration_interface.py" \
   "$PACKAGE_DIR/tools/tests/assert_tilemem_cli.py" \
   "$PACKAGE_DIR/tools/tests/assert_checkpoint_integration.py" \
@@ -66,6 +74,12 @@ if [[ -f "publish/TileMEM_TilePO_V0_1_20260611.tar.gz.sha256" ]]; then
   (cd publish && sha256sum -c TileMEM_TilePO_V0_1_20260611.tar.gz.sha256)
   tar -tzf publish/TileMEM_TilePO_V0_1_20260611.tar.gz \
     TileMEM_TilePO_V0_1_20260611/TMAP/README.md \
+    TileMEM_TilePO_V0_1_20260611/.codex/skills/tilemem-environment-setup/SKILL.md \
+    TileMEM_TilePO_V0_1_20260611/.codex/skills/tilemem-environment-setup/agents/openai.yaml \
+    TileMEM_TilePO_V0_1_20260611/.codex/skills/tilemem-acceleration-path/SKILL.md \
+    TileMEM_TilePO_V0_1_20260611/.codex/skills/tilemem-acceleration-path/agents/openai.yaml \
+    TileMEM_TilePO_V0_1_20260611/.codex/skills/tilemem-backend-precision-path/SKILL.md \
+    TileMEM_TilePO_V0_1_20260611/.codex/skills/tilemem-backend-precision-path/agents/openai.yaml \
     TileMEM_TilePO_V0_1_20260611/docs/customer_integration_end_to_end_example_20260613.md \
     TileMEM_TilePO_V0_1_20260611/docs/tilemem_checkpoint_integration.md \
     TileMEM_TilePO_V0_1_20260611/docs/tilemem_python_sdk_quickstart.md \
@@ -85,6 +99,7 @@ if [[ -f "publish/TileMEM_TilePO_V0_1_20260611.tar.gz.sha256" ]]; then
     TileMEM_TilePO_V0_1_20260611/kernels/gemm_fp4.cu \
     TileMEM_TilePO_V0_1_20260611/tools/benchmark_olmoe_integration_interface \
     TileMEM_TilePO_V0_1_20260611/tools/tilemem \
+    TileMEM_TilePO_V0_1_20260611/tools/tests/assert_agent_skills.py \
     TileMEM_TilePO_V0_1_20260611/tools/tests/assert_integration_interface.py \
     TileMEM_TilePO_V0_1_20260611/tools/tests/assert_tilemem_cli.py \
     TileMEM_TilePO_V0_1_20260611/tools/tests/assert_checkpoint_integration.py \

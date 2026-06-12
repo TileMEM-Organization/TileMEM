@@ -1,0 +1,4 @@
+interface:
+  display_name: "TileMEM Backend Precision Path"
+  short_description: "Wire low-precision backend metadata"
+  default_prompt: "Use $tilemem-backend-precision-path to add a TileMEM low-precision backend integration path."

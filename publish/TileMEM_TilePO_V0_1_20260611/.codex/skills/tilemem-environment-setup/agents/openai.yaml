@@ -1,0 +1,4 @@
+interface:
+  display_name: "TileMEM Environment Setup"
+  short_description: "Set up and verify TileMEM locally"
+  default_prompt: "Use $tilemem-environment-setup to configure and verify a local TileMEM checkout."

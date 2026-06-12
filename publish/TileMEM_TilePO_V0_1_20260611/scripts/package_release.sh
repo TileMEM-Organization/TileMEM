@@ -18,7 +18,7 @@ rsync -a \
 
 for dir in TMAP tilemem tilepo tools configs docs evidence paper scripts examples kernels include src tests; do
   if [[ -e "$dir" ]]; then
-    rsync -a --exclude='__pycache__/' --exclude='*.pyc' "$dir" "$PKG_DIR/"
+    rsync -a --exclude='__pycache__/' --exclude='*.pyc' --exclude='superpowers/' "$dir" "$PKG_DIR/"
   fi
 done
 

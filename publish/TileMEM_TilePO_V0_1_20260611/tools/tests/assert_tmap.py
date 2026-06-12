@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+import re
 import subprocess
 import sys
 import tempfile
@@ -309,7 +310,10 @@ def test_cli_rejects_mixed_target_modes() -> None:
 
 def test_release_packaging_includes_tmap() -> None:
     package_script = (ROOT / "scripts" / "package_release.sh").read_text()
-    assert "for dir in TMAP tilepo" in package_script
+    match = re.search(r"for dir in (?P<dirs>[^;]+); do", package_script)
+    assert match is not None
+    packaged_dirs = set(match.group("dirs").split())
+    assert {"TMAP", "tilepo"}.issubset(packaged_dirs)
 
 
 def main() -> None:

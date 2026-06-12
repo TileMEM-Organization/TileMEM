@@ -154,6 +154,40 @@ budget for every measured workload.
 See [TMAP/README.md](TMAP/README.md) and the checked-in reports under
 [TMAP/reports](TMAP/reports).
 
+## Industrial Python SDK
+
+TileMEM exposes a compact Python facade for application and kernel integration:
+
+```python
+import tilemem as TM
+
+spec = TM.model_spec(
+    name="my_moe",
+    layers=2,
+    experts_per_layer=4,
+    hidden_size=16,
+    intermediate_size=32,
+    expert_budget=2,
+)
+compiled = TM.plan(spec)
+print(compiled.dispatch_summary(iterations=3))
+print(TM.v0_1_headline_gain()["best"])
+```
+
+The SDK wraps the public model interface, MIR/manifest generation, backend
+capability registration, tile-handle construction, TMAP prediction, and the
+V0.1 KT comparison evidence. A runnable end-to-end SDK sample is available at:
+
+```bash
+python3 examples/tilemem_industrial_quickstart.py \
+  --out-json build/tilemem_industrial_quickstart.json
+```
+
+The quickstart validates the `import tilemem as TM` flow, emits an external
+CUDA FP8 kernel handle for `kernels/gemm_fp8.cu`, runs TMAP over the V0.1
+evidence, and reports the measured V0.1 TilePO-vs-KT headline gain.
+See [docs/tilemem_python_sdk_quickstart.md](docs/tilemem_python_sdk_quickstart.md).
+
 ## Quickstart: Offline Verification
 
 This does not require a GPU or model checkpoint. It verifies the released V0.1

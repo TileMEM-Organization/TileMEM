@@ -196,6 +196,51 @@ The public model interface is explicit:
 - default precision is BF16;
 - TilePO does not silently switch to FP8/MXFP4.
 
+## V0.12 Public MIR And Replaceable Model Interface
+
+V0.12 starts a public interface track for users who want to plug in a different
+MoE model without editing TilePO internals. A model can be described with a
+small JSON model spec or supplied by an adapter that implements
+`to_tilemem_model_spec()`.
+
+The JSON path compiles directly to a public TilePO MIR and deployment manifest:
+
+```bash
+tools/tilepo_compile_plan \
+  --model-spec configs/models/model_spec_template.json \
+  --out-dir build/model_spec_demo
+```
+
+Expected outputs:
+
+```text
+build/model_spec_demo/tilemem_v012_model_spec_template.mir.json
+build/model_spec_demo/tilemem_v012_model_spec_template.manifest.json
+build/model_spec_demo/tilemem_v012_model_spec_template.model_spec.json
+```
+
+The generated MIR carries:
+
+```json
+{
+  "schema_version": "tilepo_mir_v1",
+  "public_interface": "tilemem_public_mir_v0_12"
+}
+```
+
+Python users can build the same MIR through the public API:
+
+```python
+from tilepo import build_mir_from_model_spec, model_spec_from_dict
+
+spec = model_spec_from_dict(payload)
+mir = build_mir_from_model_spec(spec)
+```
+
+This first V0.12 interface remains BF16-only. Mixed-precision planning,
+FP8/F6/F4 calibration metadata, quality-gated admission, automatic fallback, and
+production benchmark CLI work are planned as separate V0.12 changes.
+
 ## Repository Layout
 
 ```text

@@ -1,7 +1,9 @@
 from .schema import (
     Backend,
     DeploymentMode,
+    MIR_SCHEMA_VERSION,
     ModelIR,
+    PUBLIC_MIR_INTERFACE,
     PrecisionIR,
     ResidencyIR,
     RouteIR,
@@ -13,11 +15,14 @@ from .schema import (
     build_manifest,
     model_from_dict,
 )
+from .io import load_mir, save_mir, validate_mir_dict
 
 __all__ = [
     "Backend",
     "DeploymentMode",
+    "MIR_SCHEMA_VERSION",
     "ModelIR",
+    "PUBLIC_MIR_INTERFACE",
     "PrecisionIR",
     "ResidencyIR",
     "RouteIR",
@@ -27,6 +32,8 @@ __all__ = [
     "TileIR",
     "TileId",
     "build_manifest",
+    "load_mir",
     "model_from_dict",
+    "save_mir",
+    "validate_mir_dict",
 ]
-

@@ -1,0 +1,45 @@
+{
+  "schema_version": "tilemem_model_spec_v1",
+  "name": "tilemem_v012_model_spec_template",
+  "layers": 2,
+  "experts_per_layer": 4,
+  "hidden_size": 16,
+  "intermediate_size": 32,
+  "expert_budget": 2,
+  "workload": "mixed",
+  "tile": {
+    "hidden_tile": 8,
+    "intermediate_tile": 16,
+    "shard_count": 2,
+    "projection_groups": [
+      "gate_up",
+      "down"
+    ]
+  },
+  "memory": {
+    "gpu_cache_budget_gib": 1.0,
+    "cpu_cache_budget_gib": 8.0
+  },
+  "precision": {
+    "dtype_policy": "bf16",
+    "allowed": [
+      "bf16"
+    ],
+    "calibration_required": false
+  },
+  "schedule": {
+    "deployment_mode": "balanced",
+    "backend_priority": [
+      "cuda",
+      "tilelang",
+      "kt_fallback"
+    ],
+    "mode": "verify",
+    "runtime_gates": [
+      "locality",
+      "correctness"
+    ],
+    "prewarm_policy": "hotset",
+    "miss_policy": "fallback"
+  }
+}

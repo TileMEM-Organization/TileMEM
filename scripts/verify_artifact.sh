@@ -30,6 +30,7 @@ for required in \
   "$PACKAGE_DIR/docs/customer_integration_end_to_end_example_20260613.md" \
   "$PACKAGE_DIR/docs/tilemem_checkpoint_integration.md" \
   "$PACKAGE_DIR/docs/tilemem_python_sdk_quickstart.md" \
+  "$PACKAGE_DIR/docs/tilemem_tilepo_v2_execution_efficiency_roadmap_20260613.md" \
   "$PACKAGE_DIR/configs/models/model_spec_template.json" \
   "$PACKAGE_DIR/tilemem/__init__.py" \
   "$PACKAGE_DIR/tilemem/checkpoint.py" \
@@ -83,6 +84,7 @@ if [[ -f "publish/TileMEM_TilePO_V0_1_20260611.tar.gz.sha256" ]]; then
     TileMEM_TilePO_V0_1_20260611/docs/customer_integration_end_to_end_example_20260613.md \
     TileMEM_TilePO_V0_1_20260611/docs/tilemem_checkpoint_integration.md \
     TileMEM_TilePO_V0_1_20260611/docs/tilemem_python_sdk_quickstart.md \
+    TileMEM_TilePO_V0_1_20260611/docs/tilemem_tilepo_v2_execution_efficiency_roadmap_20260613.md \
     TileMEM_TilePO_V0_1_20260611/configs/models/model_spec_template.json \
     TileMEM_TilePO_V0_1_20260611/tilemem/__init__.py \
     TileMEM_TilePO_V0_1_20260611/tilemem/checkpoint.py \

@@ -20,6 +20,7 @@ TILEPO_REQUIRE_NATIVE_BACKEND = "TILEPO_REQUIRE_NATIVE_BACKEND"
 TILEPO_RUN_ID = "TILEPO_RUN_ID"
 TILEPO_SERVE_REPLACE = "TILEPO_SERVE_REPLACE"
 TILEPO_VERIFY_ATOL = "TILEPO_VERIFY_ATOL"
+TILEMEM_REPO_ROOT = "TILEMEM_REPO_ROOT"
 
 
 def get_text(name: str, default: str = "") -> str:
@@ -114,6 +115,11 @@ def policy(default: str = "") -> str:
 
 def async_planning(default: str = "") -> str:
     return get_text(TILEPO_ASYNC_PLANNING, default)
+
+
+def tilemem_repo_root() -> Path | None:
+    root = get_text(TILEMEM_REPO_ROOT)
+    return Path(root) if root else None
 
 
 def mark_bootstrapped(checksum: str) -> None:

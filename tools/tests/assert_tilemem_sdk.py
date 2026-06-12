@@ -1,0 +1,159 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+from pathlib import Path
+import sys
+
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT))
+
+
+def test_import_tilemem_sdk_surface() -> None:
+    import tilemem as TM
+
+    required = [
+        "BackendCapability",
+        "BackendRegistry",
+        "HardwareProfile",
+        "ScaleLayout",
+        "TileFormat",
+        "TileHandle",
+        "build_manifest",
+        "build_mir",
+        "build_tile_handles",
+        "hardware_profile",
+        "model_spec",
+        "plan",
+        "predict_policy",
+        "register_backend",
+        "v0_1_headline_gain",
+    ]
+    missing = [name for name in required if not hasattr(TM, name)]
+    assert missing == []
+
+
+def test_sdk_builds_manifest_and_dispatch_handles() -> None:
+    import tilemem as TM
+
+    spec = TM.model_spec(
+        name="tilemem_sdk_quickstart",
+        layers=2,
+        experts_per_layer=4,
+        hidden_size=16,
+        intermediate_size=32,
+        expert_budget=2,
+        workload="mixed",
+        tile={"hidden_tile": 8, "intermediate_tile": 16, "shard_count": 2},
+    )
+    compiled = TM.plan(spec)
+    assert compiled.mir.name == "tilemem_sdk_quickstart"
+    assert compiled.manifest["model"] == "tilemem_sdk_quickstart"
+    assert compiled.handles
+    assert all(handle.backend == "kt_fallback" for handle in compiled.handles)
+
+    dispatch = compiled.dispatch_summary(iterations=3)
+    assert dispatch["tiles"] == len(compiled.handles)
+    assert dispatch["dispatchable_tiles"] == len(compiled.handles)
+    assert dispatch["fallback_tiles"] == 0
+
+
+def test_sdk_registers_external_backend_and_exposes_tile_handles() -> None:
+    import tilemem as TM
+
+    registry = TM.BackendRegistry()
+    TM.register_backend(
+        TM.BackendCapability(
+            name="customer_cuda",
+            formats=["fp8_e4m3_sample"],
+            layouts=["block_n32_fp32"],
+            scale_granularities=["block"],
+            projection_groups=["gate_up"],
+            runtime_entrypoint="kernels/gemm_fp8.cu:tilemem_launch_gemm_fp8",
+            owns_quantization=True,
+            owns_calibration=True,
+            owns_quality=True,
+            hardware_targets=["cuda_sm90"],
+            fallback_dtype="bf16",
+        ),
+        registry=registry,
+    )
+    manifest = {
+        "tile_ids": {
+            "L0:E0:gate_up:S0:N0-64": {
+                "layer": 0,
+                "expert": 0,
+                "projection_group": "gate_up",
+                "shard_id": 0,
+                "n_start": 0,
+                "n_end": 64,
+            }
+        },
+        "tile_offsets": {"L0:E0:gate_up:S0:N0-64": 0},
+        "tile_bytes": {"L0:E0:gate_up:S0:N0-64": 4096},
+        "tile_dtype_map": {"L0:E0:gate_up:S0:N0-64": "fp8"},
+        "tile_format_map": {
+            "L0:E0:gate_up:S0:N0-64": {
+                "format": "fp8_e4m3_sample",
+                "storage_bits": 8,
+                "compute_dtype": "fp8_e4m3",
+                "accum_dtype": "bf16",
+                "layout_owner": "customer_cuda",
+            }
+        },
+        "scale_offsets": {"L0:E0:gate_up:S0:N0-64": 0},
+        "scale_bytes": {"L0:E0:gate_up:S0:N0-64": 256},
+        "scale_layout_map": {"L0:E0:gate_up:S0:N0-64": "block_n32_fp32"},
+        "backend_owner_map": {"L0:E0:gate_up:S0:N0-64": "customer_cuda"},
+        "tile_fallback_map": {"L0:E0:gate_up:S0:N0-64": {"dtype": "bf16", "backend": "kt_fallback"}},
+        "gpu_hot_tiles": ["L0:E0:gate_up:S0:N0-64"],
+    }
+
+    handles = TM.build_tile_handles(manifest, registry=registry)
+    assert len(handles) == 1
+    handle = handles[0]
+    assert handle.dispatchable is True
+    assert handle.backend == "customer_cuda"
+    assert handle.format == "fp8_e4m3_sample"
+    assert handle.scale_offset == 0
+    assert handle.scale_bytes == 256
+    assert handle.fallback_backend == "kt_fallback"
+
+
+def test_sdk_replays_v0_1_headline_gain_and_tmap_prediction() -> None:
+    import tilemem as TM
+
+    headline = TM.v0_1_headline_gain()
+    assert headline["best"]["tok_gain_pct"] >= 30.0
+    assert headline["best"]["policy"].startswith("tilepo_")
+    assert headline["gate"]["status"] == "PASS"
+
+    hardware = TM.hardware_profile(
+        name="rtx5090_ddr_sdk_test",
+        vram_capacity_gib=32.0,
+        vram_bandwidth_gbps=1792.0,
+        vram_latency_ns=350.0,
+        dram_capacity_gib=128.0,
+        dram_bandwidth_gbps=95.0,
+        dram_latency_ns=90_000.0,
+        transfer_bandwidth_gbps=64.0,
+        transfer_latency_us=12.0,
+    )
+    prediction = TM.predict_policy(hardware=hardware, target_pairs=[("mixed", 8)])
+    mixed_8 = prediction.decision_for("mixed", 8)
+    assert mixed_8.admitted_system == "TilePO"
+    assert mixed_8.observed_tok_gain_pct is not None
+    assert mixed_8.observed_tok_gain_pct >= 25.0
+    assert mixed_8.confidence >= 0.5
+
+
+def main() -> None:
+    test_import_tilemem_sdk_surface()
+    test_sdk_builds_manifest_and_dispatch_handles()
+    test_sdk_registers_external_backend_and_exposes_tile_handles()
+    test_sdk_replays_v0_1_headline_gain_and_tmap_prediction()
+    print("TileMEM SDK tests passed")
+
+
+if __name__ == "__main__":
+    main()

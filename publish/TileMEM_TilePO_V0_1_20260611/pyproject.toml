@@ -9,4 +9,5 @@ description = "TileMEM TilePO V0.1 priority artifact"
 requires-python = ">=3.11"
 
 [tool.setuptools.packages.find]
-include = ["tilepo*"]
+where = [".", "TMAP"]
+include = ["tilemem*", "tilepo*", "tmap*"]

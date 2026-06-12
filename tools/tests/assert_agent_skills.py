@@ -6,7 +6,8 @@ import re
 
 
 ROOT = Path(__file__).resolve().parents[2]
-SKILL_ROOT = ROOT / ".codex" / "skills"
+SKILL_ROOT = ROOT / "SKILL"
+LEGACY_CODEX_SKILL_ROOT = ROOT / ".codex" / "skills"
 EXPECTED = {
     "tilemem-environment-setup": [
         "tools/tilemem doctor",
@@ -39,6 +40,7 @@ def _frontmatter(text: str) -> dict[str, str]:
 
 
 def test_tilemem_agent_skills_are_packaged_and_discoverable() -> None:
+    assert not LEGACY_CODEX_SKILL_ROOT.exists(), LEGACY_CODEX_SKILL_ROOT
     for skill_name, required_phrases in EXPECTED.items():
         skill_dir = SKILL_ROOT / skill_name
         skill_md = skill_dir / "SKILL.md"

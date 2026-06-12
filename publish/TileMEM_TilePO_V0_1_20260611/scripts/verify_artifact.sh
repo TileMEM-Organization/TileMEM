@@ -21,12 +21,12 @@ bash scripts/reproduce_ablation.sh
 PACKAGE_DIR="publish/TileMEM_TilePO_V0_1_20260611"
 for required in \
   "$PACKAGE_DIR/TMAP/README.md" \
-  "$PACKAGE_DIR/.codex/skills/tilemem-environment-setup/SKILL.md" \
-  "$PACKAGE_DIR/.codex/skills/tilemem-environment-setup/agents/openai.yaml" \
-  "$PACKAGE_DIR/.codex/skills/tilemem-acceleration-path/SKILL.md" \
-  "$PACKAGE_DIR/.codex/skills/tilemem-acceleration-path/agents/openai.yaml" \
-  "$PACKAGE_DIR/.codex/skills/tilemem-backend-precision-path/SKILL.md" \
-  "$PACKAGE_DIR/.codex/skills/tilemem-backend-precision-path/agents/openai.yaml" \
+  "$PACKAGE_DIR/SKILL/tilemem-environment-setup/SKILL.md" \
+  "$PACKAGE_DIR/SKILL/tilemem-environment-setup/agents/openai.yaml" \
+  "$PACKAGE_DIR/SKILL/tilemem-acceleration-path/SKILL.md" \
+  "$PACKAGE_DIR/SKILL/tilemem-acceleration-path/agents/openai.yaml" \
+  "$PACKAGE_DIR/SKILL/tilemem-backend-precision-path/SKILL.md" \
+  "$PACKAGE_DIR/SKILL/tilemem-backend-precision-path/agents/openai.yaml" \
   "$PACKAGE_DIR/docs/customer_integration_end_to_end_example_20260613.md" \
   "$PACKAGE_DIR/docs/tilemem_checkpoint_integration.md" \
   "$PACKAGE_DIR/docs/tilemem_python_sdk_quickstart.md" \
@@ -74,12 +74,12 @@ if [[ -f "publish/TileMEM_TilePO_V0_1_20260611.tar.gz.sha256" ]]; then
   (cd publish && sha256sum -c TileMEM_TilePO_V0_1_20260611.tar.gz.sha256)
   tar -tzf publish/TileMEM_TilePO_V0_1_20260611.tar.gz \
     TileMEM_TilePO_V0_1_20260611/TMAP/README.md \
-    TileMEM_TilePO_V0_1_20260611/.codex/skills/tilemem-environment-setup/SKILL.md \
-    TileMEM_TilePO_V0_1_20260611/.codex/skills/tilemem-environment-setup/agents/openai.yaml \
-    TileMEM_TilePO_V0_1_20260611/.codex/skills/tilemem-acceleration-path/SKILL.md \
-    TileMEM_TilePO_V0_1_20260611/.codex/skills/tilemem-acceleration-path/agents/openai.yaml \
-    TileMEM_TilePO_V0_1_20260611/.codex/skills/tilemem-backend-precision-path/SKILL.md \
-    TileMEM_TilePO_V0_1_20260611/.codex/skills/tilemem-backend-precision-path/agents/openai.yaml \
+    TileMEM_TilePO_V0_1_20260611/SKILL/tilemem-environment-setup/SKILL.md \
+    TileMEM_TilePO_V0_1_20260611/SKILL/tilemem-environment-setup/agents/openai.yaml \
+    TileMEM_TilePO_V0_1_20260611/SKILL/tilemem-acceleration-path/SKILL.md \
+    TileMEM_TilePO_V0_1_20260611/SKILL/tilemem-acceleration-path/agents/openai.yaml \
+    TileMEM_TilePO_V0_1_20260611/SKILL/tilemem-backend-precision-path/SKILL.md \
+    TileMEM_TilePO_V0_1_20260611/SKILL/tilemem-backend-precision-path/agents/openai.yaml \
     TileMEM_TilePO_V0_1_20260611/docs/customer_integration_end_to_end_example_20260613.md \
     TileMEM_TilePO_V0_1_20260611/docs/tilemem_checkpoint_integration.md \
     TileMEM_TilePO_V0_1_20260611/docs/tilemem_python_sdk_quickstart.md \

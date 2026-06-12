@@ -206,8 +206,9 @@ integrators should still use `import tilemem as TM` for in-process integration.
 
 ## Agent Skills
 
-TileMEM ships Codex Agent Skills under [.codex/skills](.codex/skills) so future
-agents can follow the project boundaries consistently:
+TileMEM ships platform-neutral Agent Skills under [SKILL](SKILL) so Codex,
+Claude Code, opencode, and other agent runners can follow the project
+boundaries consistently:
 
 - `tilemem-environment-setup`: configure and verify a local checkout without
   forcing GPU/CMake or large checkpoint downloads.

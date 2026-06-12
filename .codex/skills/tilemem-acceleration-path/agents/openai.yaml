@@ -1,0 +1,4 @@
+interface:
+  display_name: "TileMEM Acceleration Path"
+  short_description: "Connect models to TilePO and TMAP"
+  default_prompt: "Use $tilemem-acceleration-path to connect a MoE model and find a TileMEM acceleration path."

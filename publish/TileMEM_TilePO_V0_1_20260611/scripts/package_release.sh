@@ -16,7 +16,7 @@ rsync -a \
   CITATION.cff LICENSE Makefile pyproject.toml CMakeLists.txt \
   "$PKG_DIR/"
 
-for dir in TMAP tilemem tilepo tools configs docs evidence paper scripts examples kernels include src tests; do
+for dir in .codex TMAP tilemem tilepo tools configs docs evidence paper scripts examples kernels include src tests; do
   if [[ -e "$dir" ]]; then
     rsync -a --exclude='__pycache__/' --exclude='*.pyc' --exclude='superpowers/' "$dir" "$PKG_DIR/"
   fi

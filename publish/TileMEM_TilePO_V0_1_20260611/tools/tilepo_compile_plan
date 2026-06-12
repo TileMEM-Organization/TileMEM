@@ -5,15 +5,20 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from tilepo.compiler import compile_plan
+from tilepo.compiler import compile_model_spec, compile_plan
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--plan", required=True)
+    inputs = parser.add_mutually_exclusive_group(required=True)
+    inputs.add_argument("--plan")
+    inputs.add_argument("--model-spec")
     parser.add_argument("--out-dir", required=True)
     args = parser.parse_args()
-    result = compile_plan(Path(args.plan), Path(args.out_dir))
+    if args.model_spec:
+        result = compile_model_spec(Path(args.model_spec), Path(args.out_dir))
+    else:
+        result = compile_plan(Path(args.plan), Path(args.out_dir))
     print(result.mir_path)
     print(result.manifest_path)
     print(result.compiled_plan_path)
@@ -22,4 +27,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

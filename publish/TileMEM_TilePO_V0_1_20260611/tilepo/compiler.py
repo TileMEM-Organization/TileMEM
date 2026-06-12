@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from .dsl import DSLPlan, parse_tmem
+from .model_interface import build_mir_from_model_spec, model_spec_from_dict, model_spec_to_dict
 from .mir import (
     Backend,
     DeploymentMode,
@@ -19,6 +20,7 @@ from .mir import (
     TileIR,
     TileId,
     build_manifest,
+    save_mir,
 )
 
 
@@ -46,6 +48,23 @@ def compile_plan(plan_path: Path | str, out_dir: Path | str) -> CompileResult:
     mir_path.write_text(json.dumps(mir.to_dict(), indent=2, sort_keys=True) + "\n")
     manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n")
     compiled_plan_path.write_text(plan.compiled_text())
+    return CompileResult(mir_path, manifest_path, compiled_plan_path, mir, manifest)
+
+
+def compile_model_spec(model_spec_path: Path | str, out_dir: Path | str) -> CompileResult:
+    model_spec_path = Path(model_spec_path)
+    out_dir = Path(out_dir)
+    spec = model_spec_from_dict(json.loads(model_spec_path.read_text()))
+    mir = build_mir_from_model_spec(spec)
+    manifest = build_manifest(mir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    stem = spec.name
+    mir_path = out_dir / f"{stem}.mir.json"
+    manifest_path = out_dir / f"{stem}.manifest.json"
+    compiled_plan_path = out_dir / f"{stem}.model_spec.json"
+    save_mir(mir, mir_path)
+    manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n")
+    compiled_plan_path.write_text(json.dumps(model_spec_to_dict(spec), indent=2, sort_keys=True) + "\n")
     return CompileResult(mir_path, manifest_path, compiled_plan_path, mir, manifest)
 
 

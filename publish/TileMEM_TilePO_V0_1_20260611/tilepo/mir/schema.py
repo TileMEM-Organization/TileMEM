@@ -7,6 +7,10 @@ import json
 from typing import Any
 
 
+PUBLIC_MIR_INTERFACE = "tilemem_public_mir_v0_12"
+MIR_SCHEMA_VERSION = "tilepo_mir_v1"
+
+
 class TileDType(str, Enum):
     BF16 = "bf16"
     FP8 = "fp8"
@@ -255,7 +259,8 @@ class ModelIR:
 
     def to_dict(self) -> dict[str, Any]:
         return {
-            "schema_version": "tilepo_mir_v1",
+            "schema_version": MIR_SCHEMA_VERSION,
+            "public_interface": PUBLIC_MIR_INTERFACE,
             "name": self.name,
             "layers": self.layers,
             "experts_per_layer": self.experts_per_layer,
@@ -324,4 +329,3 @@ def build_manifest(model: ModelIR) -> dict[str, Any]:
 def _checksum(data: dict[str, Any]) -> str:
     encoded = json.dumps(data, sort_keys=True, separators=(",", ":")).encode()
     return hashlib.sha256(encoded).hexdigest()
-

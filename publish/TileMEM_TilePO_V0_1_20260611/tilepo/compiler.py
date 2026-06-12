@@ -229,8 +229,30 @@ def _ablation_tile_shape(
         hidden_tile = int(tile_values.get(f"{prefix}_hidden_tile", hidden_tile))
         intermediate_tile = int(tile_values.get(f"{prefix}_intermediate_tile", intermediate_tile))
         shard_count = int(tile_values.get(f"{prefix}_shard_count", shard_count))
+    elif tile_policy == "tilepo_adaptive":
+        prefix = _adaptive_segment_name(tile_values, expert)
+        hidden_tile = int(tile_values.get(f"{prefix}_hidden_tile", hidden_tile))
+        intermediate_tile = int(tile_values.get(f"{prefix}_intermediate_tile", intermediate_tile))
+        shard_count = int(tile_values.get(f"{prefix}_shard_count", shard_count))
     tile_width = intermediate_tile if projection_group in {"gate_up", "up", "down"} else hidden_tile
     return max(1, tile_width), max(1, shard_count)
+
+
+def _adaptive_segment_name(tile_values: dict[str, Any], expert: int) -> str:
+    for segment in tile_values.get("adaptive_segments", []):
+        if not isinstance(segment, dict):
+            continue
+        start = int(segment.get("expert_start", 0))
+        end = int(segment.get("expert_end", start))
+        if start <= expert < end:
+            return str(segment.get("name", "cold"))
+    hot_budget = int(tile_values.get("hot_expert_budget", 0))
+    warm_budget = int(tile_values.get("warm_expert_budget", 0))
+    if expert < hot_budget:
+        return "hot"
+    if expert < hot_budget + warm_budget:
+        return "warm"
+    return "cold"
 
 
 def _fixed_shards(extent: int, tile_width: int, shard_count: int) -> list[tuple[int, int, int]]:
@@ -267,10 +289,52 @@ def _attach_ablation_metadata(plan: DSLPlan, manifest: dict[str, Any]) -> None:
         "tile_count": len(manifest.get("tile_offsets", {})),
         "gpu_hot_tile_count": len(manifest.get("gpu_hot_tiles", [])),
         "hot_expert_budget": int(tile_block.values.get("hot_expert_budget", 0)),
+        "estimated_dispatch_units": _estimated_dispatch_units(tile_block.values, int(memory_block.values.get("experts_per_layer", 0))),
     }
+    if tile_policy == "tilepo_adaptive":
+        tile_count = len(manifest.get("tile_offsets", {}))
+        expert_budget = max(1, int(memory_block.values.get("experts_per_layer", 0)))
+        manifest["tilepo_plan"].update(
+            {
+                "adaptive_mode": str(tile_block.values.get("adaptive_mode", "throughput")),
+                "adaptive_objective": str(tile_block.values.get("adaptive_objective", "")),
+                "warm_expert_budget": int(tile_block.values.get("warm_expert_budget", 0)),
+                "cold_expert_budget": int(tile_block.values.get("cold_expert_budget", 0)),
+                "adaptive_segments": tile_block.values.get("adaptive_segments", []),
+                "estimated_tile_count": tile_count,
+                "estimated_dispatch_units": int(tile_block.values.get("estimated_dispatch_units", manifest["tilepo_plan"]["estimated_dispatch_units"])),
+                "coarse_equivalent_hot_ratio": float(
+                    tile_block.values.get(
+                        "coarse_equivalent_hot_ratio",
+                        int(tile_block.values.get("hot_expert_budget", 0)) / expert_budget,
+                    )
+                ),
+            }
+        )
     manifest["tilepo_policy"] = tile_policy
     manifest["tilepo_async_planning"] = "on" if manifest["tilepo_plan"]["async_planning"] else "off"
     manifest["checksum"] = _manifest_checksum(manifest)
+
+
+def _estimated_dispatch_units(tile_values: dict[str, Any], expert_budget: int) -> int:
+    tile_policy = str(tile_values.get("tile_policy", ""))
+    if expert_budget <= 0:
+        return 0
+    if tile_policy == "tilepo_hybrid":
+        hot_budget = int(tile_values.get("hot_expert_budget", 1))
+        cold_budget = max(0, expert_budget - hot_budget)
+        return hot_budget * _shape_units_from_tile_width(int(tile_values.get("hot_intermediate_tile", 8192))) + (
+            cold_budget * _shape_units_from_tile_width(int(tile_values.get("cold_intermediate_tile", 128)))
+        )
+    if tile_policy == "tilepo_adaptive":
+        value = tile_values.get("estimated_dispatch_units")
+        if value is not None:
+            return int(value)
+    return expert_budget * _shape_units_from_tile_width(int(tile_values.get("intermediate_tile", 8192)))
+
+
+def _shape_units_from_tile_width(intermediate_tile: int) -> int:
+    return max(1, (8192 + max(1, intermediate_tile) - 1) // max(1, intermediate_tile))
 
 
 def _manifest_checksum(data: dict[str, Any]) -> str:

@@ -15,6 +15,7 @@ python3 tools/tests/assert_integration_interface.py
 python3 tools/tests/assert_olmoe_integration_benchmark.py
 python3 tools/tests/assert_customer_integration_end_to_end.py
 python3 tools/tests/assert_tilepo_ablation.py
+python3 tools/tests/assert_tilepo_adaptive_granularity.py
 python3 tools/tests/assert_tmap.py
 bash scripts/reproduce_ablation.sh
 
@@ -55,6 +56,10 @@ for required in \
   "$PACKAGE_DIR/tools/tests/assert_tilemem_industrial_quickstart.py" \
   "$PACKAGE_DIR/tools/tests/assert_olmoe_integration_benchmark.py" \
   "$PACKAGE_DIR/tools/tests/assert_customer_integration_end_to_end.py" \
+  "$PACKAGE_DIR/tools/tests/assert_tilepo_adaptive_granularity.py" \
+  "$PACKAGE_DIR/tools/report_tilepo_adaptive_granularity" \
+  "$PACKAGE_DIR/scripts/reproduce_adaptive_granularity.sh" \
+  "$PACKAGE_DIR/tilepo/reporting/adaptive_granularity.py" \
   "$PACKAGE_DIR/tools/tilemem_checkpoint_prepare" \
   "$PACKAGE_DIR/tools/tmap_predict" \
   "$PACKAGE_DIR/tools/tests/assert_public_mir_interface.py" \
@@ -109,6 +114,10 @@ if [[ -f "publish/TileMEM_TilePO_V0_1_20260611.tar.gz.sha256" ]]; then
     TileMEM_TilePO_V0_1_20260611/tools/tests/assert_tilemem_industrial_quickstart.py \
     TileMEM_TilePO_V0_1_20260611/tools/tests/assert_olmoe_integration_benchmark.py \
     TileMEM_TilePO_V0_1_20260611/tools/tests/assert_customer_integration_end_to_end.py \
+    TileMEM_TilePO_V0_1_20260611/tools/tests/assert_tilepo_adaptive_granularity.py \
+    TileMEM_TilePO_V0_1_20260611/tools/report_tilepo_adaptive_granularity \
+    TileMEM_TilePO_V0_1_20260611/scripts/reproduce_adaptive_granularity.sh \
+    TileMEM_TilePO_V0_1_20260611/tilepo/reporting/adaptive_granularity.py \
     TileMEM_TilePO_V0_1_20260611/tools/tilemem_checkpoint_prepare \
     TileMEM_TilePO_V0_1_20260611/tools/tmap_predict \
     TileMEM_TilePO_V0_1_20260611/tools/tests/assert_public_mir_interface.py \

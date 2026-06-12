@@ -174,9 +174,10 @@ print(compiled.dispatch_summary(iterations=3))
 print(TM.v0_1_headline_gain()["best"])
 ```
 
-The SDK wraps the public model interface, MIR/manifest generation, backend
-capability registration, tile-handle construction, TMAP prediction, and the
-V0.1 KT comparison evidence. A runnable end-to-end SDK sample is available at:
+The SDK wraps the public model interface, HF checkpoint topology inference,
+MIR/manifest generation, backend capability registration, tile-handle
+construction, TMAP prediction, and the V0.1 KT comparison evidence. A runnable
+end-to-end SDK sample is available at:
 
 ```bash
 python3 examples/tilemem_industrial_quickstart.py \
@@ -190,7 +191,7 @@ See [docs/tilemem_python_sdk_quickstart.md](docs/tilemem_python_sdk_quickstart.m
 
 ### Core Python API Examples
 
-The top-level SDK currently exposes 44 public symbols. Most users only need the
+The top-level SDK currently exposes 61 public symbols. Most users only need the
 core path below:
 
 ```text
@@ -355,6 +356,72 @@ print(best["workload"], best["experts_per_layer"])
 print(best["policy"], best["async_planning"])
 print(f'{best["tok_gain_pct"]:.2f}% tok/s over KT')
 ```
+
+#### 5. Prepare A Hugging Face-Style MoE Checkpoint Artifact
+
+TileMEM can infer MoE topology from local Hugging Face-style `config.json`
+files for OLMoE, Qwen MoE, Mixtral, and generic MoE checkpoints. It also maps
+checkpoint expert tensor names to TileMEM projection groups and emits a dry-run
+serving command.
+
+```python
+import tilemem as TM
+
+topology = TM.infer_moe_topology("/path/to/checkpoint")
+spec = TM.model_spec_from_hf_config("/path/to/checkpoint")
+compiled = TM.plan_from_hf_config("/path/to/checkpoint")
+
+matches = TM.match_checkpoint_weights(
+    TM.checkpoint_weight_names("/path/to/checkpoint"),
+    spec=spec,
+    family=topology.family,
+    layers=[0],
+    experts=[0],
+)
+aliases = TM.build_runtime_weight_aliases(
+    family=topology.family,
+    layers=[0],
+    experts=[0],
+)
+
+artifact = TM.export_checkpoint_artifact(
+    "/path/to/checkpoint",
+    out_dir="build/checkpoint_artifact",
+    layers=[0],
+    experts=[0],
+    materialize=False,
+)
+
+serving = TM.run_serving_backend(
+    checkpoint_dir="/path/to/checkpoint",
+    backend="sglang",
+    plan_path=artifact.manifest_path,
+    expert_budget=spec.expert_budget,
+    execute=False,
+)
+
+print(topology.to_dict())
+print(matches.to_dict()["missing"])
+print(artifact.tile_checkpoint_map_path)
+print(aliases["L0:E0"]["sglang"])
+print(serving.to_dict()["command"])
+```
+
+The same flow is available as a CLI:
+
+```bash
+tools/tilemem_checkpoint_prepare \
+  --checkpoint-dir /path/to/checkpoint \
+  --out-dir build/checkpoint_artifact \
+  --backend sglang \
+  --dry-run
+```
+
+`execute=False` / `--dry-run` is the default customer-safe posture. Real serving
+launch is explicit via `execute=True` or `--execute`, and still requires the
+local KT/SGLang runtime and a compatible checkpoint. See
+[docs/tilemem_checkpoint_integration.md](docs/tilemem_checkpoint_integration.md)
+and [examples/tilemem_checkpoint_integration.py](examples/tilemem_checkpoint_integration.py).
 
 ## Quickstart: Offline Verification
 

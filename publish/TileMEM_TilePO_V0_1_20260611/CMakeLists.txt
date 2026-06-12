@@ -59,3 +59,4 @@ set_tests_properties(tilemem_replay_tilemem tilemem_replay_on_demand
   PROPERTIES DEPENDS tilemem_generate_demo_data)
 
 add_test(NAME tilepo_ablation COMMAND python3 ${CMAKE_SOURCE_DIR}/tools/tests/assert_tilepo_ablation.py)
+add_test(NAME tmap_prediction COMMAND python3 ${CMAKE_SOURCE_DIR}/tools/tests/assert_tmap.py)

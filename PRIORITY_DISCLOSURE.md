@@ -1,9 +1,9 @@
 # TilePO Priority Disclosure
 
-**Disclosure date:** 2026-06-11  
-**Project:** TileMEM  
-**Algorithm/system:** TilePO  
-**Primary release target:** `v0.1-priority-2026-06-11`  
+**Disclosure date:** 2026-06-11<br>
+**Project:** TileMEM<br>
+**Algorithm/system:** TilePO<br>
+**Primary release target:** `v0.1-priority-2026-06-11`<br>
 **Current PDF-included record:** `v0.1.1-pdf-2026-06-12`
 
 ## Disclosure Statement

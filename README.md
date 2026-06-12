@@ -112,6 +112,48 @@ Serving precision: BF16 / KT-native path
   <img src="docs/assets/tilepo-p95-improvement.png" alt="TilePO p95 latency improvement over KT across expert budgets" width="860">
 </p>
 
+## TMAP Predictor
+
+TMAP, short for Two-Tier Tile Memory Allocation Predictor, is an experimental
+hardware-aware cost-model module for TileMEM. TMAP V0.1 reuses the public
+TilePO V0.1 BF16 samples and predicts relative policy preference under a
+two-tier VRAM/DRAM hardware profile.
+
+TMAP is intentionally conservative:
+
+- it predicts KT vs TilePO policy preference, not exact serving tok/s;
+- it models the current two-tier VRAM/DRAM setting only;
+- it uses BF16 V0.1 samples for calibration;
+- it recommends fallback KT when predicted TilePO gain is below threshold.
+- it can explicitly extrapolate unseen expert budgets, but those decisions are
+  marked as quick-planning estimates and include a short probe recommendation.
+
+Example:
+
+```bash
+tools/tmap_predict \
+  --summary evidence/ablation/tilepo_ablation_summary.json \
+  --hardware-profile TMAP/hardware_profiles/rtx5090_ddr.json \
+  --out-dir build/tmap_rtx5090_ddr
+```
+
+Example quick-planning extrapolation for an unseen expert budget:
+
+```bash
+tools/tmap_predict \
+  --summary evidence/ablation/tilepo_ablation_summary.json \
+  --hardware-profile TMAP/hardware_profiles/rtx5090_ddr.json \
+  --out-dir build/tmap_rtx5090_ddr_mixed12 \
+  --target mixed:12 \
+  --allow-extrapolation
+```
+
+Use `--target-experts 12` only when you intentionally want to scan that expert
+budget for every measured workload.
+
+See [TMAP/README.md](TMAP/README.md) and the checked-in reports under
+[TMAP/reports](TMAP/reports).
+
 ## Quickstart: Offline Verification
 
 This does not require a GPU or model checkpoint. It verifies the released V0.1
@@ -157,6 +199,7 @@ The public model interface is explicit:
 ## Repository Layout
 
 ```text
+TMAP/             Two-tier hardware-aware Tile Memory Allocation Predictor.
 tilepo/            TilePO Python implementation.
 tools/             Reporters, sweep runners, V0.1 plan renderers, tests.
 configs/          Replaceable model, workload, and plan examples.

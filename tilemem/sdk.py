@@ -47,6 +47,25 @@ from tilepo.model_interface import (
     model_spec_from_dict,
     model_spec_to_dict,
 )
+from .checkpoint import (
+    CheckpointArtifact,
+    MoETopology,
+    ServingCommand,
+    ServingResult,
+    WeightMatchResult,
+    build_runtime_weight_aliases,
+    build_serving_command,
+    build_tile_checkpoint_map,
+    checkpoint_weight_names,
+    export_checkpoint_artifact,
+    infer_moe_topology,
+    load_checkpoint_weight_map,
+    load_hf_config,
+    match_checkpoint_weights,
+    model_spec_from_hf_config,
+    plan_from_hf_config,
+    run_serving_backend,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]

@@ -1,15 +1,16 @@
 # TileMEM Python SDK Quickstart
 
-This quickstart previews the planned industrial Python SDK surface:
+This quickstart documents the industrial Python SDK surface:
 
 ```python
 import tilemem as TM
 ```
 
-The SDK is designed to turn a MoE model description into a TileMEM MIR,
-deployment manifest, dispatchable tile handles, backend capability checks, and
-TMAP policy decisions. TileMEM owns tile planning and metadata. External
-developers own low-precision kernels and numerical validation.
+The SDK turns a MoE model description or local Hugging Face-style checkpoint
+config into a TileMEM MIR, deployment manifest, dispatchable tile handles,
+backend capability checks, and TMAP policy decisions. TileMEM owns tile
+planning and metadata. External developers own low-precision kernels and
+numerical validation.
 
 ## 1. Build A Small MoE Model Spec
 
@@ -183,18 +184,90 @@ print(f'{best["p95_reduction_pct"]:.2f}% p95 reduction')
 The V0.1 headline is BF16 / KT-native evidence. It is not an FP8, F6, F4, or
 production Tensor Core quality claim.
 
+## 6. Prepare A Local Hugging Face-Style Checkpoint
+
+TileMEM can infer MoE topology from local `config.json` files and prepare a
+serving artifact without downloading a model or launching a server. Supported
+topology patterns include OLMoE, Qwen MoE, Mixtral, and generic MoE configs
+with standard expert-count fields.
+
+```python
+import tilemem as TM
+
+checkpoint_dir = "/path/to/checkpoint"
+
+topology = TM.infer_moe_topology(checkpoint_dir)
+spec = TM.model_spec_from_hf_config(checkpoint_dir)
+compiled = TM.plan_from_hf_config(checkpoint_dir)
+
+matches = TM.match_checkpoint_weights(
+    TM.checkpoint_weight_names(checkpoint_dir),
+    spec=spec,
+    family=topology.family,
+    layers=[0],
+    experts=[0],
+)
+aliases = TM.build_runtime_weight_aliases(
+    family=topology.family,
+    layers=[0],
+    experts=[0],
+)
+
+artifact = TM.export_checkpoint_artifact(
+    checkpoint_dir,
+    out_dir="build/checkpoint_artifact",
+    layers=[0],
+    experts=[0],
+    materialize=False,
+)
+
+serving = TM.run_serving_backend(
+    checkpoint_dir=checkpoint_dir,
+    backend="sglang",
+    plan_path=artifact.manifest_path,
+    expert_budget=spec.expert_budget,
+    execute=False,
+)
+
+print(compiled.mir.name)
+print(matches.missing)
+print(artifact.tile_checkpoint_map_path)
+print(aliases["L0:E0"]["sglang"])
+print(serving.command)
+```
+
+Equivalent CLI:
+
+```bash
+tools/tilemem_checkpoint_prepare \
+  --checkpoint-dir /path/to/checkpoint \
+  --out-dir build/checkpoint_artifact \
+  --backend sglang \
+  --dry-run
+```
+
+`artifact.tile_checkpoint_map_path` points to a tile-level JSON map. Each
+TileMEM tile records its stable key, N range, TileMEM payload offset, source
+checkpoint tensors, and source shard files. `materialize=True` copies referenced
+checkpoint shard files into the artifact. It does not claim tensor-level
+repacking or quality validation; external runtimes still own exact tensor
+loading, layout conversion, calibration, and serving lifecycle.
+
 ## Ownership Boundary
 
 TileMEM provides:
 
 - model spec ingestion and MIR construction;
+- HF config topology inference and checkpoint weight-name mapping;
 - deployment manifest generation;
 - stable tile IDs, byte offsets, scale metadata fields, and fallback metadata;
 - backend capability registration and dispatchable-handle checks;
+- dry-run KT/SGLang serving command generation;
 - TMAP policy prediction from V0.1 BF16 evidence.
 
 External developers provide and validate:
 
+- checkpoint provenance and exact tensor loading/repacking;
 - FP8, F6, F4, or other packed-weight kernels;
 - quantization algorithms and packed storage layouts;
 - scale generation, calibration data, and calibration procedure;

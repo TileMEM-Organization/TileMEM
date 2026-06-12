@@ -1,0 +1,77 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import argparse
+import json
+from pathlib import Path
+import sys
+
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+import tilemem as TM  # noqa: E402
+
+
+SCHEMA_VERSION = "tilemem_checkpoint_prepare_v1"
+
+
+def _csv_ints(text: str) -> list[int] | None:
+    if not text:
+        return None
+    return [int(item) for item in text.split(",") if item != ""]
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Prepare a TileMEM artifact from an HF-style MoE checkpoint.")
+    parser.add_argument("--checkpoint-dir", required=True)
+    parser.add_argument("--out-dir", required=True)
+    parser.add_argument("--name", default="")
+    parser.add_argument("--backend", choices=["sglang", "kt_native"], default="sglang")
+    parser.add_argument("--layers", default="")
+    parser.add_argument("--experts", default="")
+    parser.add_argument("--materialize", action="store_true")
+    execution = parser.add_mutually_exclusive_group()
+    execution.add_argument("--dry-run", action="store_true", default=True)
+    execution.add_argument("--execute", action="store_true")
+    args = parser.parse_args()
+
+    checkpoint_dir = Path(args.checkpoint_dir)
+    out_dir = Path(args.out_dir)
+    if not checkpoint_dir.exists():
+        print(f"checkpoint dir does not exist: {checkpoint_dir}", file=sys.stderr)
+        return 2
+
+    try:
+        artifact = TM.export_checkpoint_artifact(
+            checkpoint_dir,
+            out_dir=out_dir,
+            name=args.name or None,
+            layers=_csv_ints(args.layers),
+            experts=_csv_ints(args.experts),
+            materialize=args.materialize,
+        )
+        spec_data = json.loads(artifact.model_spec_path.read_text())
+        serving = TM.run_serving_backend(
+            checkpoint_dir=checkpoint_dir,
+            backend=args.backend,
+            plan_path=artifact.manifest_path,
+            out_dir=out_dir / "serving",
+            expert_budget=int(spec_data["expert_budget"]),
+            execute=args.execute,
+        )
+    except Exception as exc:
+        print(str(exc), file=sys.stderr)
+        return 1
+
+    payload = {
+        "schema_version": SCHEMA_VERSION,
+        "artifact": artifact.to_dict(),
+        "serving": serving.to_dict(),
+    }
+    print(json.dumps(payload, indent=2, sort_keys=True))
+    return 0 if serving.returncode == 0 else serving.returncode
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

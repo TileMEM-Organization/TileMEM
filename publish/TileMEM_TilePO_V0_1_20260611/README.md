@@ -174,9 +174,10 @@ print(compiled.dispatch_summary(iterations=3))
 print(TM.v0_1_headline_gain()["best"])
 ```
 
-The SDK wraps the public model interface, MIR/manifest generation, backend
-capability registration, tile-handle construction, TMAP prediction, and the
-V0.1 KT comparison evidence. A runnable end-to-end SDK sample is available at:
+The SDK wraps the public model interface, HF checkpoint topology inference,
+MIR/manifest generation, backend capability registration, tile-handle
+construction, TMAP prediction, and the V0.1 KT comparison evidence. A runnable
+end-to-end SDK sample is available at:
 
 ```bash
 python3 examples/tilemem_industrial_quickstart.py \
@@ -187,6 +188,240 @@ The quickstart validates the `import tilemem as TM` flow, emits an external
 CUDA FP8 kernel handle for `kernels/gemm_fp8.cu`, runs TMAP over the V0.1
 evidence, and reports the measured V0.1 TilePO-vs-KT headline gain.
 See [docs/tilemem_python_sdk_quickstart.md](docs/tilemem_python_sdk_quickstart.md).
+
+### Core Python API Examples
+
+The top-level SDK currently exposes 61 public symbols. Most users only need the
+core path below:
+
+```text
+model spec -> MIR -> manifest -> tile handles -> backend dispatch / TMAP decision
+```
+
+#### 1. Build A Model Spec And Compile A TileMEM Plan
+
+`TM.model_spec()` describes the replaceable MoE model shape. `TM.plan()` turns
+that description into a public MIR, a deployment manifest, and runtime
+`TileHandle` objects.
+
+```python
+import tilemem as TM
+
+spec = TM.model_spec(
+    name="olmoe_like_demo",
+    layers=16,
+    experts_per_layer=64,
+    hidden_size=2048,
+    intermediate_size=1024,
+    expert_budget=8,
+    workload="mixed",
+    tile={
+        "hidden_tile": 256,
+        "intermediate_tile": 256,
+        "shard_count": 4,
+        "projection_groups": ["gate_up", "down"],
+    },
+    memory={
+        "gpu_cache_budget_gib": 8.0,
+        "cpu_cache_budget_gib": 64.0,
+    },
+)
+
+compiled = TM.plan(spec)
+
+print(compiled.mir.name)
+print(len(compiled.handles))
+print(compiled.dispatch_summary(iterations=3))
+```
+
+`compiled` is a `TileMEMPlan`:
+
+- `compiled.mir`: public model/tile intermediate representation;
+- `compiled.manifest`: deployment metadata with tile offsets, dtype tags,
+  scale metadata, hot-tile residency, and fallback descriptors;
+- `compiled.handles`: dispatch-ready tile handles for runtime and external
+  kernels.
+
+#### 2. Inspect Runtime Tile Handles
+
+External runtimes and kernels should consume `TileHandle` objects instead of
+parsing TileMEM internals. Each handle tells the backend where the tile is,
+which format it uses, how scale metadata is stored, and which fallback path is
+available.
+
+```python
+for handle in compiled.handles[:4]:
+    print(
+        handle.stable_key,
+        handle.residency,
+        handle.dtype,
+        handle.format,
+        handle.weight_offset,
+        handle.weight_bytes,
+        handle.scale_offset,
+        handle.scale_bytes,
+        handle.fallback_backend,
+    )
+```
+
+Important fields:
+
+- `stable_key`: stable tile id, for example `L0:E0:gate_up:S0:N0-256`;
+- `weight_offset` / `weight_bytes`: packed weight location in the artifact;
+- `scale_offset` / `scale_bytes` / `scale_layout`: low-precision scale metadata
+  location and layout when present;
+- `backend`: preferred backend owner for this tile;
+- `fallback_dtype` / `fallback_backend`: validated fallback path;
+- `dispatchable`: whether the currently registered backend can run this tile.
+
+#### 3. Register An External CUDA, TileLang, Triton, Or ROCm Backend
+
+TileMEM does not assume that a low-precision tile format is CUDA-specific. The
+backend capability declares what a customer-owned kernel supports. In this
+example, the registered backend happens to be a CUDA FP8 launcher:
+
+```python
+registry = TM.BackendRegistry()
+
+TM.register_backend(
+    TM.BackendCapability(
+        name="customer_cuda_fp8",
+        formats=["fp8_e4m3_sample"],
+        layouts=["block_n32_fp32"],
+        scale_granularities=["block"],
+        projection_groups=["gate_up"],
+        runtime_entrypoint="kernels/gemm_fp8.cu:tilemem_launch_gemm_fp8",
+        owns_quantization=True,
+        owns_calibration=True,
+        owns_quality=True,
+        hardware_targets=["cuda_sm90"],
+        fallback_dtype="bf16",
+    ),
+    registry=registry,
+)
+
+handles = TM.build_tile_handles(compiled.manifest, registry=registry)
+dispatchable = [handle for handle in handles if handle.dispatchable]
+print(len(dispatchable))
+```
+
+Here `formats`, `layouts`, and `scale_granularities` are integration-contract
+names. CUDA is identified by the backend name and `runtime_entrypoint`, not by
+those metadata fields. A TileLang or Triton backend can register different
+entrypoints while using the same TileMEM handle contract.
+
+TileMEM owns the tile ids, dtype tags, scale metadata descriptors, manifest,
+backend capability checks, tile handles, and fallback descriptors. External
+developers own concrete FP8/FP6/FP4 kernels, model adaptation, quantization,
+calibration, quality evaluation, and backend-specific physical layouts.
+
+#### 4. Predict A Policy With TMAP And Replay V0.1 Evidence
+
+TMAP uses the checked-in V0.1 BF16 evidence plus a two-tier VRAM/DRAM hardware
+profile to recommend whether a target workload should use KT or TilePO.
+
+```python
+hardware = TM.hardware_profile(
+    name="rtx5090_ddr",
+    vram_capacity_gib=32.0,
+    vram_bandwidth_gbps=1792.0,
+    vram_latency_ns=350.0,
+    dram_capacity_gib=128.0,
+    dram_bandwidth_gbps=95.0,
+    dram_latency_ns=90_000.0,
+    transfer_bandwidth_gbps=64.0,
+    transfer_latency_us=12.0,
+)
+
+prediction = TM.predict_policy(
+    hardware=hardware,
+    target_pairs=[("mixed", 8)],
+)
+decision = prediction.decision_for("mixed", 8)
+
+print(decision.admitted_system)
+print(decision.recommended_policy)
+print(decision.predicted_tok_gain_pct)
+print(decision.confidence)
+```
+
+To replay the public V0.1 TilePO-vs-KT evidence:
+
+```python
+headline = TM.v0_1_headline_gain()
+best = headline["best"]
+
+print(headline["gate"]["status"])
+print(best["workload"], best["experts_per_layer"])
+print(best["policy"], best["async_planning"])
+print(f'{best["tok_gain_pct"]:.2f}% tok/s over KT')
+```
+
+#### 5. Prepare A Hugging Face-Style MoE Checkpoint Artifact
+
+TileMEM can infer MoE topology from local Hugging Face-style `config.json`
+files for OLMoE, Qwen MoE, Mixtral, and generic MoE checkpoints. It also maps
+checkpoint expert tensor names to TileMEM projection groups and emits a dry-run
+serving command.
+
+```python
+import tilemem as TM
+
+topology = TM.infer_moe_topology("/path/to/checkpoint")
+spec = TM.model_spec_from_hf_config("/path/to/checkpoint")
+compiled = TM.plan_from_hf_config("/path/to/checkpoint")
+
+matches = TM.match_checkpoint_weights(
+    TM.checkpoint_weight_names("/path/to/checkpoint"),
+    spec=spec,
+    family=topology.family,
+    layers=[0],
+    experts=[0],
+)
+aliases = TM.build_runtime_weight_aliases(
+    family=topology.family,
+    layers=[0],
+    experts=[0],
+)
+
+artifact = TM.export_checkpoint_artifact(
+    "/path/to/checkpoint",
+    out_dir="build/checkpoint_artifact",
+    layers=[0],
+    experts=[0],
+    materialize=False,
+)
+
+serving = TM.run_serving_backend(
+    checkpoint_dir="/path/to/checkpoint",
+    backend="sglang",
+    plan_path=artifact.manifest_path,
+    expert_budget=spec.expert_budget,
+    execute=False,
+)
+
+print(topology.to_dict())
+print(matches.to_dict()["missing"])
+print(artifact.tile_checkpoint_map_path)
+print(aliases["L0:E0"]["sglang"])
+print(serving.to_dict()["command"])
+```
+
+The same flow is available as a CLI:
+
+```bash
+tools/tilemem_checkpoint_prepare \
+  --checkpoint-dir /path/to/checkpoint \
+  --out-dir build/checkpoint_artifact \
+  --backend sglang \
+  --dry-run
+```
+
+`execute=False` / `--dry-run` is the default customer-safe posture. Real serving
+launch is explicit via `execute=True` or `--execute`, and still requires the
+local KT/SGLang runtime and a compatible checkpoint. See
+[docs/tilemem_checkpoint_integration.md](docs/tilemem_checkpoint_integration.md)
+and [examples/tilemem_checkpoint_integration.py](examples/tilemem_checkpoint_integration.py).
 
 ## Quickstart: Offline Verification
 
@@ -265,10 +500,10 @@ The generated MIR carries:
 Python users can build the same MIR through the public API:
 
 ```python
-from tilepo import build_mir_from_model_spec, model_spec_from_dict
+import tilemem as TM
 
-spec = model_spec_from_dict(payload)
-mir = build_mir_from_model_spec(spec)
+spec = TM.model_spec_from_dict(payload)
+mir = TM.build_mir(spec)
 ```
 
 This first V0.12 interface remains BF16-only. Mixed-precision planning,

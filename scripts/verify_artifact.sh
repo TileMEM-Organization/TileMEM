@@ -6,6 +6,7 @@ cd "$ROOT"
 
 python3 -m compileall -q tilemem tilepo TMAP
 python3 tools/tests/assert_tilemem_sdk.py
+python3 tools/tests/assert_tilemem_cli.py
 python3 tools/tests/assert_checkpoint_integration.py
 python3 tools/tests/assert_tilemem_industrial_quickstart.py
 python3 tools/tests/assert_public_mir_interface.py
@@ -37,7 +38,9 @@ for required in \
   "$PACKAGE_DIR/kernels/gemm_fp6.cu" \
   "$PACKAGE_DIR/kernels/gemm_fp4.cu" \
   "$PACKAGE_DIR/tools/benchmark_olmoe_integration_interface" \
+  "$PACKAGE_DIR/tools/tilemem" \
   "$PACKAGE_DIR/tools/tests/assert_integration_interface.py" \
+  "$PACKAGE_DIR/tools/tests/assert_tilemem_cli.py" \
   "$PACKAGE_DIR/tools/tests/assert_checkpoint_integration.py" \
   "$PACKAGE_DIR/tools/tests/assert_tilemem_sdk.py" \
   "$PACKAGE_DIR/tools/tests/assert_tilemem_industrial_quickstart.py" \
@@ -52,6 +55,8 @@ for required in \
     exit 1
   fi
 done
+
+"$PACKAGE_DIR/tools/tilemem" doctor --json >/dev/null
 
 if [[ -f "$PACKAGE_DIR/SHA256SUMS" ]]; then
   (cd "$PACKAGE_DIR" && sha256sum -c SHA256SUMS)
@@ -79,7 +84,9 @@ if [[ -f "publish/TileMEM_TilePO_V0_1_20260611.tar.gz.sha256" ]]; then
     TileMEM_TilePO_V0_1_20260611/kernels/gemm_fp6.cu \
     TileMEM_TilePO_V0_1_20260611/kernels/gemm_fp4.cu \
     TileMEM_TilePO_V0_1_20260611/tools/benchmark_olmoe_integration_interface \
+    TileMEM_TilePO_V0_1_20260611/tools/tilemem \
     TileMEM_TilePO_V0_1_20260611/tools/tests/assert_integration_interface.py \
+    TileMEM_TilePO_V0_1_20260611/tools/tests/assert_tilemem_cli.py \
     TileMEM_TilePO_V0_1_20260611/tools/tests/assert_checkpoint_integration.py \
     TileMEM_TilePO_V0_1_20260611/tools/tests/assert_tilemem_sdk.py \
     TileMEM_TilePO_V0_1_20260611/tools/tests/assert_tilemem_industrial_quickstart.py \

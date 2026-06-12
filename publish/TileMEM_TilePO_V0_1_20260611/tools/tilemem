@@ -1,0 +1,284 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import argparse
+import json
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+from typing import Any
+
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+
+QUICK_VERIFY_COMMANDS = [
+    "tools/tests/assert_tilemem_sdk.py",
+    "tools/tests/assert_checkpoint_integration.py",
+    "tools/tests/assert_tmap.py",
+]
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(
+        prog="tools/tilemem",
+        description="Production-style TileMEM orchestration CLI.",
+    )
+    subcommands = parser.add_subparsers(dest="command", required=True)
+
+    doctor = subcommands.add_parser("doctor", help="Check local TileMEM runtime readiness.")
+    doctor.add_argument("--json", action="store_true", help="Emit machine-readable JSON.")
+    doctor.set_defaults(handler=_cmd_doctor)
+
+    verify = subcommands.add_parser("verify", help="Run TileMEM verification gates.")
+    verify_mode = verify.add_mutually_exclusive_group()
+    verify_mode.add_argument("--quick", action="store_true", help="Run core Python assertions.")
+    verify_mode.add_argument("--full", action="store_true", help="Run scripts/verify_artifact.sh.")
+    verify.set_defaults(handler=_cmd_verify)
+
+    compile_parser = subcommands.add_parser("compile", help="Compile a model spec or .tmem plan.")
+    compile_input = compile_parser.add_mutually_exclusive_group(required=True)
+    compile_input.add_argument("--model-spec", type=Path)
+    compile_input.add_argument("--plan", type=Path)
+    compile_parser.add_argument("--out-dir", type=Path, required=True)
+    compile_parser.set_defaults(handler=_cmd_compile)
+
+    checkpoint = subcommands.add_parser("checkpoint", help="Checkpoint integration commands.")
+    checkpoint_subcommands = checkpoint.add_subparsers(dest="checkpoint_command", required=True)
+    checkpoint_prepare = checkpoint_subcommands.add_parser(
+        "prepare",
+        help="Prepare a TileMEM artifact from an HF-style MoE checkpoint.",
+    )
+    checkpoint_prepare.add_argument("--checkpoint-dir", type=Path, required=True)
+    checkpoint_prepare.add_argument("--out-dir", type=Path, required=True)
+    checkpoint_prepare.add_argument("--name", default="")
+    checkpoint_prepare.add_argument("--backend", choices=["sglang", "kt_native"], default="sglang")
+    checkpoint_prepare.add_argument("--layers", default="")
+    checkpoint_prepare.add_argument("--experts", default="")
+    checkpoint_prepare.add_argument("--materialize", action="store_true")
+    checkpoint_execution = checkpoint_prepare.add_mutually_exclusive_group()
+    checkpoint_execution.add_argument("--dry-run", action="store_true", default=True)
+    checkpoint_execution.add_argument("--execute", action="store_true")
+    checkpoint_prepare.set_defaults(handler=_cmd_checkpoint_prepare)
+
+    tmap = subcommands.add_parser("tmap", help="TMAP prediction commands.")
+    tmap_subcommands = tmap.add_subparsers(dest="tmap_command", required=True)
+    tmap_predict = tmap_subcommands.add_parser("predict", help="Run TMAP two-tier prediction.")
+    tmap_predict.add_argument("--summary", type=Path, required=True)
+    tmap_predict.add_argument("--hardware-profile", type=Path, required=True)
+    tmap_predict.add_argument("--out-dir", type=Path, required=True)
+    tmap_predict.add_argument("--admit-threshold-pct", type=float, default=3.0)
+    tmap_predict.add_argument("--target", action="append", default=[])
+    tmap_predict.add_argument("--target-experts", default="")
+    tmap_predict.add_argument("--allow-extrapolation", action="store_true")
+    tmap_predict.set_defaults(handler=_cmd_tmap_predict)
+
+    args = parser.parse_args()
+    try:
+        return int(args.handler(args))
+    except Exception as exc:  # noqa: BLE001 - CLI should return concise operational errors.
+        print(f"TileMEM CLI failed: {exc}", file=sys.stderr)
+        return 1
+
+
+def _cmd_doctor(args: argparse.Namespace) -> int:
+    payload: dict[str, Any] = {
+        "schema_version": "tilemem_cli_doctor_v1",
+        "repo_root": str(ROOT),
+        "python": sys.version.split()[0],
+        "python_executable": sys.executable,
+        "tools": {
+            "nvcc": shutil.which("nvcc"),
+            "nvidia-smi": shutil.which("nvidia-smi"),
+            "sglang": shutil.which("sglang"),
+        },
+    }
+    try:
+        import tilemem as TM
+
+        payload.update(
+            {
+                "tilemem_importable": True,
+                "tilemem_version": getattr(TM, "__version__", "unknown"),
+                "api_symbols": len(getattr(TM, "__all__", [])),
+            }
+        )
+    except Exception as exc:  # noqa: BLE001 - doctor reports import readiness.
+        payload.update(
+            {
+                "tilemem_importable": False,
+                "tilemem_version": None,
+                "api_symbols": 0,
+                "import_error": str(exc),
+            }
+        )
+
+    if args.json:
+        _print_json(payload)
+    else:
+        print("TileMEM doctor")
+        print(f"  repo: {payload['repo_root']}")
+        print(f"  python: {payload['python']} ({payload['python_executable']})")
+        print(f"  tilemem: {'ok' if payload['tilemem_importable'] else 'failed'}")
+        print(f"  api symbols: {payload['api_symbols']}")
+        for name, path in payload["tools"].items():
+            print(f"  {name}: {path or 'not found'}")
+    return 0 if payload["tilemem_importable"] else 1
+
+
+def _cmd_verify(args: argparse.Namespace) -> int:
+    mode = "full" if args.full else "quick"
+    if mode == "full":
+        commands = [["bash", "scripts/verify_artifact.sh"]]
+    else:
+        commands = [[sys.executable, command] for command in QUICK_VERIFY_COMMANDS]
+
+    completed = []
+    for command in commands:
+        result = _run(command)
+        completed.append(_relative_command(command))
+        if result.returncode != 0:
+            _print_failure("verification command failed", command, result)
+            _print_json(
+                {
+                    "schema_version": "tilemem_cli_verify_v1",
+                    "mode": mode,
+                    "status": "failed",
+                    "commands": completed,
+                    "returncode": result.returncode,
+                }
+            )
+            return result.returncode
+
+    _print_json(
+        {
+            "schema_version": "tilemem_cli_verify_v1",
+            "mode": mode,
+            "status": "passed",
+            "commands": [_relative_command(command) for command in commands],
+        }
+    )
+    return 0
+
+
+def _cmd_compile(args: argparse.Namespace) -> int:
+    from tilepo.compiler import compile_model_spec, compile_plan
+
+    if args.model_spec:
+        result = compile_model_spec(args.model_spec, args.out_dir)
+        input_kind = "model_spec"
+        input_path = args.model_spec
+    else:
+        result = compile_plan(args.plan, args.out_dir)
+        input_kind = "plan"
+        input_path = args.plan
+
+    _print_json(
+        {
+            "schema_version": "tilemem_cli_compile_v1",
+            "status": "compiled",
+            "input_kind": input_kind,
+            "input_path": str(input_path),
+            "mir_path": str(result.mir_path),
+            "manifest_path": str(result.manifest_path),
+            "compiled_plan_path": str(result.compiled_plan_path),
+        }
+    )
+    return 0
+
+
+def _cmd_checkpoint_prepare(args: argparse.Namespace) -> int:
+    command = [
+        sys.executable,
+        str(ROOT / "tools" / "tilemem_checkpoint_prepare"),
+        "--checkpoint-dir",
+        str(args.checkpoint_dir),
+        "--out-dir",
+        str(args.out_dir),
+        "--backend",
+        args.backend,
+    ]
+    if args.name:
+        command.extend(["--name", args.name])
+    if args.layers:
+        command.extend(["--layers", args.layers])
+    if args.experts:
+        command.extend(["--experts", args.experts])
+    if args.materialize:
+        command.append("--materialize")
+    command.append("--execute" if args.execute else "--dry-run")
+
+    result = _run(command)
+    if result.returncode != 0:
+        _print_failure("checkpoint preparation failed", command, result)
+        return result.returncode
+    print(result.stdout, end="")
+    return 0
+
+
+def _cmd_tmap_predict(args: argparse.Namespace) -> int:
+    command = [
+        sys.executable,
+        str(ROOT / "tools" / "tmap_predict"),
+        "--summary",
+        str(args.summary),
+        "--hardware-profile",
+        str(args.hardware_profile),
+        "--out-dir",
+        str(args.out_dir),
+        "--admit-threshold-pct",
+        str(args.admit_threshold_pct),
+    ]
+    for target in args.target:
+        command.extend(["--target", target])
+    if args.target_experts:
+        command.extend(["--target-experts", args.target_experts])
+    if args.allow_extrapolation:
+        command.append("--allow-extrapolation")
+
+    result = _run(command)
+    if result.returncode != 0:
+        _print_failure("TMAP prediction failed", command, result)
+        return result.returncode
+
+    lines = [line.strip() for line in result.stdout.splitlines() if line.strip()]
+    if len(lines) < 2:
+        raise ValueError(f"unexpected tmap_predict output: {result.stdout!r}")
+    _print_json(
+        {
+            "schema_version": "tilemem_cli_tmap_predict_v1",
+            "status": "predicted",
+            "summary_path": lines[0],
+            "report_path": lines[1],
+            "tool_stdout": lines,
+        }
+    )
+    return 0
+
+
+def _run(command: list[str]) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(command, cwd=ROOT, capture_output=True, text=True)
+
+
+def _relative_command(command: list[str]) -> str:
+    if len(command) == 2 and command[0] == sys.executable:
+        return command[1]
+    return " ".join(command)
+
+
+def _print_failure(message: str, command: list[str], result: subprocess.CompletedProcess[str]) -> None:
+    print(f"{message}: {' '.join(command)}", file=sys.stderr)
+    if result.stdout:
+        print(result.stdout, file=sys.stderr, end="" if result.stdout.endswith("\n") else "\n")
+    if result.stderr:
+        print(result.stderr, file=sys.stderr, end="" if result.stderr.endswith("\n") else "\n")
+
+
+def _print_json(payload: dict[str, Any]) -> None:
+    print(json.dumps(payload, indent=2, sort_keys=True))
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

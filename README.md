@@ -189,6 +189,21 @@ CUDA FP8 kernel handle for `kernels/gemm_fp8.cu`, runs TMAP over the V0.1
 evidence, and reports the measured V0.1 TilePO-vs-KT headline gain.
 See [docs/tilemem_python_sdk_quickstart.md](docs/tilemem_python_sdk_quickstart.md).
 
+## Production CLI
+
+For shell workflows, TileMEM ships a thin production-style CLI:
+
+```bash
+tools/tilemem doctor
+tools/tilemem verify --quick
+tools/tilemem compile --model-spec configs/models/model_spec_template.json --out-dir build/cli_compile
+tools/tilemem checkpoint prepare --checkpoint-dir /path/to/hf_checkpoint --out-dir build/checkpoint --backend sglang --dry-run
+tools/tilemem tmap predict --summary evidence/ablation/tilepo_ablation_summary.json --hardware-profile TMAP/hardware_profiles/rtx5090_ddr.json --out-dir build/tmap --target mixed:8
+```
+
+The CLI is intentionally an orchestration entrypoint. Kernel authors and Python
+integrators should still use `import tilemem as TM` for in-process integration.
+
 ### Core Python API Examples
 
 The top-level SDK currently exposes 61 public symbols. Most users only need the

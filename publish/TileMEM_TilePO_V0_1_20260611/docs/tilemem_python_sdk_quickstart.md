@@ -6,6 +6,13 @@ This quickstart documents the industrial Python SDK surface:
 import tilemem as TM
 ```
 
+For shell workflows, use the thin CLI wrapper:
+
+```bash
+tools/tilemem doctor
+tools/tilemem verify --quick
+```
+
 The SDK turns a MoE model description or local Hugging Face-style checkpoint
 config into a TileMEM MIR, deployment manifest, dispatchable tile handles,
 backend capability checks, and TMAP policy decisions. TileMEM owns tile
@@ -239,7 +246,7 @@ print(serving.command)
 Equivalent CLI:
 
 ```bash
-tools/tilemem_checkpoint_prepare \
+tools/tilemem checkpoint prepare \
   --checkpoint-dir /path/to/checkpoint \
   --out-dir build/checkpoint_artifact \
   --backend sglang \

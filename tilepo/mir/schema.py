@@ -6,6 +6,8 @@ import hashlib
 import json
 from typing import Any
 
+from tilepo.integration import ScaleLayout, TileFormat
+
 
 PUBLIC_MIR_INTERFACE = "tilemem_public_mir_v0_12"
 MIR_SCHEMA_VERSION = "tilepo_mir_v1"
@@ -14,6 +16,8 @@ MIR_SCHEMA_VERSION = "tilepo_mir_v1"
 class TileDType(str, Enum):
     BF16 = "bf16"
     FP8 = "fp8"
+    FP6 = "fp6"
+    FP4 = "fp4"
     MXFP4 = "mxfp4"
 
 
@@ -88,20 +92,42 @@ class TileIR:
     dtype: TileDType
     bytes: int
     scale_bytes: int = 0
+    format: TileFormat | None = None
+    scale: ScaleLayout | None = None
+    backend: str | None = None
+    fallback_dtype: str | None = None
+    fallback_backend: str | None = None
 
     def validate(self) -> None:
         if self.bytes <= 0:
             raise ValueError("tile bytes must be positive")
         if self.scale_bytes < 0:
             raise ValueError("scale bytes must be non-negative")
+        if self.format is not None:
+            self.format.validate()
+        if self.scale is not None:
+            self.scale.validate()
+        if self.backend is not None and not self.backend:
+            raise ValueError("tile backend must not be empty")
 
     def to_dict(self) -> dict[str, Any]:
-        return {
+        data = {
             "tile_id": self.tile_id.to_dict(),
             "dtype": self.dtype.value,
             "bytes": self.bytes,
             "scale_bytes": self.scale_bytes,
         }
+        if self.format is not None:
+            data["format"] = self.format.to_dict()
+        if self.scale is not None:
+            data["scale"] = self.scale.to_dict()
+        if self.backend is not None:
+            data["backend"] = self.backend
+        if self.fallback_dtype is not None:
+            data["fallback_dtype"] = self.fallback_dtype
+        if self.fallback_backend is not None:
+            data["fallback_backend"] = self.fallback_backend
+        return data
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "TileIR":
@@ -110,6 +136,11 @@ class TileIR:
             TileDType(data["dtype"]),
             int(data["bytes"]),
             int(data.get("scale_bytes", 0)),
+            TileFormat.from_dict(data["format"]) if "format" in data else None,
+            ScaleLayout.from_dict(data["scale"]) if "scale" in data else None,
+            str(data["backend"]) if "backend" in data else None,
+            str(data["fallback_dtype"]) if "fallback_dtype" in data else None,
+            str(data["fallback_backend"]) if "fallback_backend" in data else None,
         )
 
 
@@ -177,8 +208,9 @@ class PrecisionIR:
     def validate(self) -> None:
         if not self.allowed:
             raise ValueError("at least one dtype must be allowed")
-        if TileDType.MXFP4 in self.allowed and not self.calibration_required:
-            raise ValueError("MXFP4 requires calibration")
+        low_precision = {TileDType.FP8, TileDType.FP6, TileDType.FP4, TileDType.MXFP4}
+        if any(dtype in self.allowed for dtype in low_precision) and not self.calibration_required:
+            raise ValueError("low-precision tile formats require calibration")
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -296,7 +328,13 @@ def build_manifest(model: ModelIR) -> dict[str, Any]:
     tile_offsets: dict[str, int] = {}
     tile_bytes: dict[str, int] = {}
     tile_dtype_map: dict[str, str] = {}
+    tile_ids: dict[str, dict[str, Any]] = {}
+    tile_format_map: dict[str, dict[str, Any]] = {}
     scale_offsets: dict[str, int] = {}
+    scale_bytes: dict[str, int] = {}
+    scale_layout_map: dict[str, str] = {}
+    backend_owner_map: dict[str, str] = {}
+    tile_fallback_map: dict[str, dict[str, str]] = {}
     offset = 0
     scale_offset = 0
     for tile in tiles:
@@ -304,16 +342,35 @@ def build_manifest(model: ModelIR) -> dict[str, Any]:
         tile_offsets[key] = offset
         tile_bytes[key] = tile.bytes
         tile_dtype_map[key] = tile.dtype.value
+        tile_ids[key] = tile.tile_id.to_dict()
+        if tile.format is not None:
+            tile_format_map[key] = tile.format.to_dict()
+        if tile.scale is not None:
+            scale_layout_map[key] = tile.scale.layout
+        if tile.backend is not None:
+            backend_owner_map[key] = tile.backend
+        if tile.fallback_dtype is not None or tile.fallback_backend is not None:
+            tile_fallback_map[key] = {
+                "dtype": tile.fallback_dtype or "bf16",
+                "backend": tile.fallback_backend or "kt_fallback",
+            }
         offset += tile.bytes
         if tile.scale_bytes:
             scale_offsets[key] = scale_offset
+            scale_bytes[key] = tile.scale_bytes
             scale_offset += tile.scale_bytes
     manifest = {
         "schema_version": "tilepo_manifest_v1",
+        "tile_ids": tile_ids,
         "tile_offsets": tile_offsets,
         "tile_bytes": tile_bytes,
         "tile_dtype_map": tile_dtype_map,
+        "tile_format_map": tile_format_map,
         "scale_offsets": scale_offsets,
+        "scale_bytes": scale_bytes,
+        "scale_layout_map": scale_layout_map,
+        "backend_owner_map": backend_owner_map,
+        "tile_fallback_map": tile_fallback_map,
         "gpu_hot_tiles": [tile.stable_key() for tile in sorted(model.residency.gpu_hot_tiles)],
         "fallback_chain": [item.value if isinstance(item, TileDType) else item for item in model.residency.fallback_chain],
         "backend_priority": [backend.value for backend in model.schedule.backend_priority],
